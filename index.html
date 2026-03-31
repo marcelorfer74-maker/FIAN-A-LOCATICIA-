@@ -8,16 +8,18 @@
     <meta name="theme-color" content="#004691">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
-        .porto-blue { background-color: #004691; }
-        .porto-text { color: #004691; }
+        input:focus { outline: none; border-color: #004691; ring: 2px #004691; }
         [x-cloak] { display: none !important; }
-        .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
+        .porto-blue { background-color: #004691; }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-cloak>
@@ -26,87 +28,156 @@
         
         <header class="porto-blue p-8 rounded-[32px] text-white mb-6 shadow-xl relative overflow-hidden flex flex-col items-center text-center border-b-4 border-amber-400">
             <div class="relative z-10">
-                <h1 class="text-4xl font-black tracking-tighter leading-none">RIBERA</h1>
+                <h1 class="text-4xl font-black tracking-tighter leading-none uppercase">RIBERA</h1>
                 <p class="text-xs font-bold uppercase tracking-[0.3em] mt-1 text-white/90">Corretora</p>
                 <div class="h-[1px] w-12 bg-amber-400 mx-auto my-3"></div>
                 <p class="text-lg font-medium lowercase tracking-tight text-amber-300">fiança locatícia</p>
             </div>
-            
             <i data-lucide="shield-check" class="absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
 
         <div class="space-y-4">
 
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                 <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
-                    <i data-lucide="user-cog" class="w-3 h-3 porto-text"></i> Perfil de Atendimento
+                    <i data-lucide="user-cog" class="w-3 h-3 text-[#004691]"></i> Usuário e Atendimento
                 </h2>
                 <div class="grid gap-4">
-                    <div class="grid grid-cols-2 gap-2">
-                        <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Cliente</button>
-                        <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Imobiliária</button>
+                    <div>
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Tipo de Perfil</label>
+                        <div class="grid grid-cols-2 gap-2 mt-1">
+                            <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-2.5 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
+                            <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-2.5 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
+                        </div>
                     </div>
-                    <div x-show="userType === 'Imobiliária'" x-transition>
-                        <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-semibold porto-text">
-                            <option value="Beth">Atendente Beth</option>
-                            <option value="Otalivio">Atendente Otalivio</option>
-                            <option value="Paulo">Atendente Paulo</option>
-                            <option value="Ribera">Atendente Ribera</option>
+                    
+                    <div x-show="userType === 'Imobiliária'" x-transition class="animate-in fade-in slide-in-from-top-2 duration-300">
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Atendente Ribera</label>
+                        <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm mt-1 font-medium">
+                            <option value="Beth">Beth</option>
+                            <option value="Otalivio">Otalivio</option>
+                            <option value="Paulo">Paulo</option>
+                            <option value="Ribera">Ribera</option>
+                            <option value="Atendimento">Outro Atendimento</option>
                         </select>
                     </div>
                 </div>
             </section>
             
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400">1. Locatários</h2>
-                    <span class="text-[10px] porto-blue px-3 py-1 rounded-full font-black text-white" x-text="tenants.length + '/5'"></span>
+                    <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400">
+                        <i data-lucide="users" class="w-3 h-3 text-[#004691]"></i> Locatários
+                    </h2>
+                    <span class="text-[9px] porto-blue px-3 py-1 rounded-full font-black text-white" x-text="tenants.length + '/5'"></span>
                 </div>
+
                 <div class="space-y-4">
                     <template x-for="(tenant, index) in tenants" :key="index">
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
-                            <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-md">
-                                <i data-lucide="trash-2" class="w-3 h-3"></i>
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative animate-in fade-in slide-in-from-top-2">
+                            <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-lg border border-slate-100 active:scale-90">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
+                            
                             <div class="grid gap-3">
-                                <input type="text" x-model="tenant.name" placeholder="Nome Completo *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="tel" x-model="tenant.cpf" @input="maskCPF($event, index)" placeholder="CPF *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
-                                    <input type="tel" x-model="tenant.phone" @input="maskPhone($event, index)" placeholder="WhatsApp *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="tel">
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Nome Completo</label>
+                                    <input type="text" x-model="tenant.name" placeholder="Nome do proponente" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
                                 </div>
-                                <input type="email" x-model="tenant.email" placeholder="E-mail *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                                <div class="grid grid-cols-1 gap-3">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">CPF *</label>
+                                            <input type="tel" x-model="tenant.cpf" @input="maskCPF($event, index)" placeholder="000.000.000-00" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
+                                        </div>
+                                        <div>
+                                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">WhatsApp *</label>
+                                            <input type="tel" x-model="tenant.phone" @input="maskPhone($event, index)" placeholder="(00) 00000-0000" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="tel">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">E-mail *</label>
+                                        <input type="email" x-model="tenant.email" placeholder="email@exemplo.com" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </template>
-                    <button @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase flex items-center justify-center gap-2">
-                        <i data-lucide="plus" class="w-3 h-3"></i> Adicionar Pessoa
+
+                    <button @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase hover:border-[#004691] hover:text-[#004691] transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> Adicionar Locatário
                     </button>
                 </div>
             </section>
 
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
-                <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">2. Dados e Valores</h2>
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
+                    <i data-lucide="map-pin" class="w-3 h-3 text-[#004691]"></i> Dados do Imóvel
+                </h2>
+                
                 <div class="grid gap-3">
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="CEP *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
-                        <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold porto-text">
-                            <option value="Residencial">Residencial</option>
-                            <option value="Comercial">Comercial</option>
-                        </select>
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">CEP *</label>
+                            <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="00000-000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
+                        </div>
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Finalidade</label>
+                            <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium">
+                                <option value="Residencial">Residencial</option>
+                                <option value="Comercial">Comercial</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Número</label>
+                            <input type="text" x-model="property.number" placeholder="Ex: 123" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                        </div>
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Complemento</label>
+                            <input type="text" x-model="property.complement" placeholder="Apto/Sala" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                        </div>
                     </div>
                     <div>
-                        <label class="text-[9px] font-black porto-text uppercase ml-1">Aluguel Bruto *</label>
-                        <input type="tel" x-model="values.rent" @input="maskCurrency($event, 'rent')" placeholder="R$ 0,00" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-4 text-xl font-black porto-text" inputmode="numeric">
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic">Código Flex (Porto)</label>
+                        <input type="text" x-model="property.flexCode" placeholder="Se possuir código promocional" class="w-full bg-amber-50/50 border border-amber-100 rounded-xl px-3 py-3 text-sm italic">
                     </div>
                 </div>
             </section>
 
-            <div class="pt-4 space-y-3">
-                <button @click="sendWhatsApp" class="w-full porto-blue text-white py-5 rounded-[24px] font-black uppercase italic shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
+                    <i data-lucide="banknote" class="w-3 h-3 text-[#004691]"></i> Valores da Locação
+                </h2>
+                
+                <div class="grid gap-3">
+                    <div>
+                        <label class="text-[9px] font-bold text-slate-900 uppercase ml-1">Aluguel Bruto *</label>
+                        <input type="tel" x-model="values.rent" @input="maskCurrency($event, 'rent')" placeholder="R$ 0,00" class="w-full bg-slate-50 border border-slate-900/10 rounded-xl px-3 py-3 text-lg font-black text-[#004691]" inputmode="numeric">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">IPTU Mensal</label>
+                            <input type="tel" x-model="values.iptu" @input="maskCurrency($event, 'iptu')" placeholder="R$ 0,00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
+                        </div>
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Condomínio</label>
+                            <input type="tel" x-model="values.condo" @input="maskCurrency($event, 'condo')" placeholder="R$ 0,00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="grid gap-3 pt-4">
+                <button @click="sendWhatsApp" class="w-full porto-blue text-white py-5 rounded-2xl font-black uppercase italic tracking-tighter shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
                     <i data-lucide="send" class="w-5 h-5"></i> Solicitar via Ribera
                 </button>
-                <button @click="clearForm" class="w-full text-slate-300 py-2 font-bold text-[9px] uppercase tracking-widest text-center">Reiniciar Formulário</button>
+                <button @click="clearForm" class="w-full bg-transparent text-slate-400 py-3 rounded-2xl font-bold text-[10px] uppercase tracking-widest transition-all">
+                    Resetar Formulário
+                </button>
             </div>
+
         </div>
 
         <footer class="mt-8 text-center pb-10">
@@ -121,25 +192,91 @@
                 userType: 'Cliente',
                 attendantName: 'Atendimento',
                 tenants: [{ name: '', cpf: '', email: '', phone: '' }],
-                property: { cep: '', type: 'Residencial' },
-                values: { rent: '' },
+                property: { cep: '', type: 'Residencial', number: '', complement: '', flexCode: '' },
+                values: { rent: '', iptu: '', condo: '' },
+                
                 init() { lucide.createIcons(); },
-                addTenant() { if (this.tenants.length < 5) { this.tenants.push({ name: '', cpf: '', email: '', phone: '' }); this.$nextTick(() => lucide.createIcons()); } },
+
+                addTenant() {
+                    if (this.tenants.length < 5) {
+                        this.tenants.push({ name: '', cpf: '', email: '', phone: '' });
+                        this.$nextTick(() => lucide.createIcons());
+                    }
+                },
+
                 removeTenant(index) { this.tenants.splice(index, 1); },
-                maskCPF(e, index) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.tenants[index].cpf = v.substring(0, 14); },
-                maskPhone(e, index) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); v = v.replace(/(\d)(\d{4})$/, '$1-$2'); this.tenants[index].phone = v.substring(0, 15); },
-                maskCEP(e) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/^(\d{5})(\d)/, '$1-$2'); this.property.cep = v.substring(0, 9); },
-                maskCurrency(e, field) { let v = e.target.value.replace(/\D/g, ''); v = (v / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); this.values[field] = v; },
-                clearForm() { if(confirm('Limpar tudo?')) location.reload(); },
+
+                maskCPF(e, index) {
+                    let v = e.target.value.replace(/\D/g, '');
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                    this.tenants[index].cpf = v.substring(0, 14);
+                },
+
+                maskPhone(e, index) {
+                    let v = e.target.value.replace(/\D/g, '');
+                    v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+                    v = v.replace(/(\d)(\d{4})$/, '$1-$2');
+                    this.tenants[index].phone = v.substring(0, 15);
+                },
+
+                maskCEP(e) {
+                    let v = e.target.value.replace(/\D/g, '');
+                    v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+                    this.property.cep = v.substring(0, 9);
+                },
+
+                maskCurrency(e, field) {
+                    let v = e.target.value.replace(/\D/g, '');
+                    v = (v / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    this.values[field] = v;
+                },
+
+                clearForm() { if(confirm('Limpar todos os campos?')) { location.reload(); } },
+
                 sendWhatsApp() {
-                    const empty = this.tenants.some(t => !t.cpf || !t.email || !t.phone);
-                    if (empty || !this.property.cep || !this.values.rent) { alert('Preencha os campos obrigatórios (*)'); return; }
-                    let tTxt = '';
-                    this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nNome: ${t.name || '-'}\nCPF: ${t.cpf}\nEmail: ${t.email}\nCel: ${t.phone}\n\n`; });
-                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nTipo: ${this.property.type}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\n\n_Enviado via App Ribera_`;
-                    window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
+                    const emptyTenant = this.tenants.some(t => !t.cpf || !t.email || !t.phone);
+                    if (emptyTenant || !this.property.cep || !this.values.rent) {
+                        alert('Por favor, preencha CPF, Email, Celular, CEP e Aluguel.');
+                        return;
+                    }
+
+                    let tenantText = '';
+                    this.tenants.forEach((t, i) => {
+                        tenantText += `👤 *LOCATÁRIO ${i+1}:*\n`;
+                        tenantText += `Nome: ${t.name || '-'}\n`;
+                        tenantText += `CPF: ${t.cpf}\n`;
+                        tenantText += `E-mail: ${t.email}\n`;
+                        tenantText += `Cel: ${t.phone}\n\n`;
+                    });
+
+                    const message = `*COTAÇÃO: FIANÇA (RIBERA)*\n\n` +
+                        `👤 *ORIGEM:* ${this.userType}\n` +
+                        `🎧 *ATENDENTE:* ${this.attendantName}\n\n` +
+                        tenantText +
+                        `🏠 *DADOS DO IMÓVEL:*\n` +
+                        `Tipo: ${this.property.type}\n` +
+                        `CEP: ${this.property.cep}\n` +
+                        `Número: ${this.property.number || '-'}\n` +
+                        `Comp: ${this.property.complement || '-'}\n` +
+                        `Cód Flex: ${this.property.flexCode || '-'}\n\n` +
+                        `💰 *VALORES:* \n` +
+                        `Aluguel: ${this.values.rent}\n` +
+                        `IPTU: ${this.values.iptu || 'R$ 0,00'}\n` +
+                        `Condomínio: ${this.values.condo || 'R$ 0,00'}\n\n` +
+                        `_Enviado via App Ribera Seguros - Mestre Seguro360_`;
+
+                    const phone = '5515996367478';
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
                 }
             }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
         }
     </script>
 </body>
