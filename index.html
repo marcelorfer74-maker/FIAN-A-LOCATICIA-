@@ -3,86 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> Finaça Ribera - Fiança Ágil</title>
-    
+    <title>Ribera Corretora</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#004691">
-    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtyuxtt4s/image/upload/v1711833130/ribera_app_icon.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f1f5f9; }
         .porto-blue { background-color: #004691; }
         .porto-text { color: #004691; }
-        .porto-border { border-color: #004691; }
         [x-cloak] { display: none !important; }
-        .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-cloak>
 
     <div class="max-w-md mx-auto px-4 pt-6">
         
-        <header class="porto-blue p-6 rounded-[32px] text-white mb-6 shadow-xl relative overflow-hidden flex flex-col items-center text-center border-b-4" style="border-color: #ffb900;">
+        <header class="porto-blue p-6 rounded-[32px] text-white mb-6 shadow-xl relative overflow-hidden flex flex-col items-center text-center border-b-4 border-[#ffb900]">
             
             <div class="bg-white p-3 rounded-2xl mb-3 shadow-inner">
-                <img src="https://res.cloudinary.com/dtyuxtt4s/image/upload/v1711833130/logo_ribera_seguros_mobile.png" alt="RIBERA" class="h-10 w-auto">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABACAMAAAC979vBAAAASFBMVEUAAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///9FmS9ZAAAAFnRSTlMA7v9E/f6m/f69/vv9vv7+/f7+/v7++28VkwAAAatJREFUeNrt29mSgyAMBuAsuIByqFp7/6fdS9uOOnYm09mZf8HId0ggmIat0vof0y0S9Mv8L2fAnAFzBswZMGfAnAFzBswZMGfAnAFzBswZMGfAnAFzBswZMGfAnAFzBswZMOfPAXzY52m+fB4glsh9nS/fB7Ba6vD49RkAs8R67D8+pIBSInm+vB/AZCl1frz/B9D+SUnz44X7AGZLOvPjmf8AUpK9PF65D2C2VDY/XnkPoK0zY3688hpAS7JjfrzxGkBLsmN+vPEewNfX88vX7wNYSzrj7YVXAL6/Xl6+fh/AeunR98IdAKuYfB3hA0hB4usIH0AmAn8d4QNIRmCrCA9ARmCrCA9AZgS2ivAApP8vW0V4AHKiX60iPAAmW6X61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAAkI7BVhAcAEYGvIzwAsyV9X+EDSAl8HeED+Po6/vXy9fMA1kvX98IdANVS9X2EVwBWSzXj7YVXAKul9v97mUeI86V9mS+vBwhF8mU+fxdAZ8CcAXMGzBkwZ8CcAXMGzBkwZ8CcAXMGzBkwZ8CcAXMGzBkwZ8CcAXMG/AF8AL66Zt2O99mXAAAAAElFTkSuQmCC" alt="RIBERA" class="h-10 w-auto">
             </div>
             
             <div class="relative z-10">
                 <div class="flex items-center justify-center gap-2 mb-1">
-                    <i data-lucide="shield-check" class="w-5 h-5" style="color: #ffb900;"></i>
+                    <i data-lucide="shield-check" class="w-5 h-5 text-[#ffb900]"></i>
                     <h1 class="text-xl font-extrabold italic tracking-tighter uppercase">Mestre Seguro360</h1>
                 </div>
-                <p class="text-[9px] font-bold uppercase tracking-widest" style="color: #ffb900;">Consultoria Marcelo Fernandes | SUSEP: 3H032J</p>
+                <p class="text-[9px] font-bold text-[#ffb900] uppercase tracking-widest">Marcelo Fernandes | SUSEP: 3H032J</p>
             </div>
-            <i data-lucide="key" class="absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
 
         <div class="space-y-4">
-            
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
-                <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
-                    <i data-lucide="user-cog" class="w-3 h-3 porto-text"></i> Perfil
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                    <i data-lucide="user-cog" class="w-3 h-3 porto-text"></i> Atendimento
                 </h2>
-                <div class="grid gap-4">
-                    <div class="grid grid-cols-2 gap-2">
-                        <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Cliente</button>
-                        <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Imobiliária</button>
-                    </div>
-                    <div x-show="userType === 'Imobiliária'" x-transition class="animate-in fade-in slide-in-from-top-2">
-                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Atendente Ribera</label>
-                        <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm mt-1 font-semibold porto-text">
-                            <option value="Beth">Beth</option>
-                            <option value="Otalivio">Otalivio</option>
-                            <option value="Paulo">Paulo</option>
-                            <option value="Ribera">Ribera</option>
-                            <option value="Atendimento">Atendimento Geral</option>
-                        </select>
-                    </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Cliente</button>
+                    <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Imobiliária</button>
+                </div>
+                <div x-show="userType === 'Imobiliária'" class="mt-3">
+                    <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-semibold porto-text">
+                        <option value="Beth">Beth</option>
+                        <option value="Otalivio">Otalivio</option>
+                        <option value="Paulo">Paulo</option>
+                        <option value="Ribera">Ribera</option>
+                    </select>
                 </div>
             </section>
             
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400">
-                        <i data-lucide="users" class="w-3 h-3 porto-text"></i> Locatários
-                    </h2>
+                    <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400">1. Locatários</h2>
                     <span class="text-[10px] porto-blue px-3 py-1 rounded-full font-black text-white" x-text="tenants.length + '/5'"></span>
                 </div>
-
                 <div class="space-y-4">
                     <template x-for="(tenant, index) in tenants" :key="index">
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative animate-in fade-in slide-in-from-top-2">
-                            <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-lg border active:scale-90">
-                                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
+                            <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-md">
+                                <i data-lucide="x" class="w-3 h-3"></i>
                             </button>
                             <div class="grid gap-3">
                                 <input type="text" x-model="tenant.name" placeholder="Nome Completo *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
@@ -94,55 +76,35 @@
                             </div>
                         </div>
                     </template>
-                    <button @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase hover:porto-border hover:porto-text transition-all flex items-center justify-center gap-2">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Adicionar Pessoa
+                    <button @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase flex items-center justify-center gap-2">
+                        <i data-lucide="plus" class="w-3 h-3"></i> Adicionar Pessoa
                     </button>
                 </div>
             </section>
 
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
-                <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
-                    <i data-lucide="map-pin" class="w-3 h-3 porto-text"></i> Dados do Imóvel
-                </h2>
+            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">2. Dados e Valores</h2>
                 <div class="grid gap-3">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="CEP *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
-                        <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-semibold porto-text">
+                        <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold porto-text">
                             <option value="Residencial">Residencial</option>
                             <option value="Comercial">Comercial</option>
                         </select>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="text" x-model="property.number" placeholder="Número" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
-                        <input type="text" x-model="property.complement" placeholder="Comp./Apto" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
-                    </div>
-                    <input type="text" x-model="property.flexCode" placeholder="Código Flex (Porto)" class="w-full bg-amber-50/50 border border-amber-100 rounded-xl px-3 py-3 text-sm italic">
-                </div>
-            </section>
-
-            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
-                <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
-                    <i data-lucide="banknote" class="w-3 h-3 porto-text"></i> Valores
-                </h2>
-                <div class="grid gap-3">
                     <div>
-                        <label class="text-[9px] font-bold porto-text uppercase ml-1">Aluguel Bruto *</label>
+                        <label class="text-[9px] font-black porto-text uppercase ml-1">Aluguel Bruto *</label>
                         <input type="tel" x-model="values.rent" @input="maskCurrency($event, 'rent')" placeholder="R$ 0,00" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-4 text-xl font-black porto-text" inputmode="numeric">
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="tel" x-model="values.iptu" @input="maskCurrency($event, 'iptu')" placeholder="IPTU R$" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
-                        <input type="tel" x-model="values.condo" @input="maskCurrency($event, 'condo')" placeholder="Cond. R$" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
-                    </div>
                 </div>
             </section>
 
-            <div class="grid gap-3 pt-4">
-                <button @click="sendWhatsApp" class="w-full porto-blue text-white py-5 rounded-[24px] font-black uppercase italic tracking-tight shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
-                    <i data-lucide="send" class="w-5 h-5"></i> Enviar via Ribera
+            <div class="pt-4 space-y-3">
+                <button @click="sendWhatsApp" class="w-full porto-blue text-white py-5 rounded-[24px] font-black uppercase italic shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                    <i data-lucide="send" class="w-5 h-5"></i> Solicitar via Ribera
                 </button>
-                <button @click="clearForm" class="w-full text-slate-300 py-2 font-bold text-[9px] uppercase tracking-widest transition-all">Limpar Formulário</button>
+                <button @click="clearForm" class="w-full text-slate-300 py-2 font-bold text-[9px] uppercase tracking-widest text-center">Reiniciar Formulário</button>
             </div>
-
         </div>
 
         <footer class="mt-8 text-center pb-10">
@@ -155,8 +117,8 @@
             return {
                 userType: 'Cliente', attendantName: 'Atendimento',
                 tenants: [{ name: '', cpf: '', email: '', phone: '' }],
-                property: { cep: '', type: 'Residencial', number: '', complement: '', flexCode: '' },
-                values: { rent: '', iptu: '', condo: '' },
+                property: { cep: '', type: 'Residencial' },
+                values: { rent: '' },
                 init() { lucide.createIcons(); },
                 addTenant() { if (this.tenants.length < 5) { this.tenants.push({ name: '', cpf: '', email: '', phone: '' }); this.$nextTick(() => lucide.createIcons()); } },
                 removeTenant(index) { this.tenants.splice(index, 1); },
@@ -164,13 +126,13 @@
                 maskPhone(e, index) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); v = v.replace(/(\d)(\d{4})$/, '$1-$2'); this.tenants[index].phone = v.substring(0, 15); },
                 maskCEP(e) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/^(\d{5})(\d)/, '$1-$2'); this.property.cep = v.substring(0, 9); },
                 maskCurrency(e, field) { let v = e.target.value.replace(/\D/g, ''); v = (v / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); this.values[field] = v; },
-                clearForm() { if(confirm('Deseja limpar todos os campos?')) location.reload(); },
+                clearForm() { if(confirm('Limpar?')) location.reload(); },
                 sendWhatsApp() {
                     const empty = this.tenants.some(t => !t.cpf || !t.email || !t.phone);
-                    if (empty || !this.property.cep || !this.values.rent) { alert('Preencha CPF, WhatsApp, E-mail, CEP e Aluguel de todos.'); return; }
+                    if (empty || !this.property.cep || !this.values.rent) { alert('Preencha os campos obrigatórios (*)'); return; }
                     let tTxt = '';
-                    this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nNome: ${t.name || '-'}\nCPF: ${t.cpf}\nE-mail: ${t.email}\nCel: ${t.phone}\n\n`; });
-                    const msg = `*NOVA ANÁLISE: RIBERA SEGUROS*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nTipo: ${this.property.type}\nCód Flex: ${this.property.flexCode || '-'}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\nIPTU/Cond: ${this.values.iptu || 'R$ 0'} / ${this.values.condo || 'R$ 0'}\n\n_Enviado via App Ribera_`;
+                    this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nCPF: ${t.cpf}\nWhatsApp: ${t.phone}\n\n`; });
+                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nAluguel: ${this.values.rent}`;
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
