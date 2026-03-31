@@ -1,7 +1,8 @@
 {
-  "name": "FIANÇA LOCATICIA",
-  "short_name": "Fiança",
-  "start_url": "/",
+  "name": "Fiança Locatícia Pro",
+  "short_name": "Fiança Pro",
+  "description": "Consultoria Marcelo Fernandes - Especialista em Seguros",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#004691",
   "theme_color": "#004691",
