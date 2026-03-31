@@ -3,59 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ribera Corretora</title>
+    <title>Ribera Fiança Locatícia</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#004691">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
         .porto-blue { background-color: #004691; }
         .porto-text { color: #004691; }
         [x-cloak] { display: none !important; }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-cloak>
 
     <div class="max-w-md mx-auto px-4 pt-6">
         
-        <header class="porto-blue p-6 rounded-[32px] text-white mb-6 shadow-xl relative overflow-hidden flex flex-col items-center text-center border-b-4 border-[#ffb900]">
-            
-            <div class="bg-white p-3 rounded-2xl mb-3 shadow-inner">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABACAMAAAC979vBAAAASFBMVEUAAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///8AAAD///9FmS9ZAAAAFnRSTlMA7v9E/f6m/f69/vv9vv7+/f7+/v7++28VkwAAAatJREFUeNrt29mSgyAMBuAsuIByqFp7/6fdS9uOOnYm09mZf8HId0ggmIat0vof0y0S9Mv8L2fAnAFzBswZMGfAnAFzBswZMGfAnAFzBswZMGfAnAFzBswZMGfAnAFzBswZMOfPAXzY52m+fB4glsh9nS/fB7Ba6vD49RkAs8R67D8+pIBSInm+vB/AZCl1frz/B9D+SUnz44X7AGZLOvPjmf8AUpK9PF65D2C2VDY/XnkPoK0zY3688hpAS7JjfrzxGkBLsmN+vPEewNfX88vX7wNYSzrj7YVXAL6/Xl6+fh/AeunR98IdAKuYfB3hA0hB4usIH0AmAn8d4QNIRmCrCA9ARmCrCA9AZgS2ivAApP8vW0V4AHKiX60iPAAmW6X61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAD61SoiPAAkI7BVhAcAEYGvIzwAsyV9X+EDSAl8HeED+Po6/vXy9fMA1kvX98IdANVS9X2EVwBWSzXj7YVXAKul9v97mUeI86V9mS+vBwhF8mU+fxdAZ8CcAXMGzBkwZ8CcAXMGzBkwZ8CcAXMGzBkwZ8CcAXMGzBkwZ8CcAXMG/AF8AL66Zt2O99mXAAAAAElFTkSuQmCC" alt="RIBERA" class="h-10 w-auto">
-            </div>
-            
+        <header class="porto-blue p-8 rounded-[32px] text-white mb-6 shadow-xl relative overflow-hidden flex flex-col items-center text-center border-b-4 border-amber-400">
             <div class="relative z-10">
-                <div class="flex items-center justify-center gap-2 mb-1">
-                    <i data-lucide="shield-check" class="w-5 h-5 text-[#ffb900]"></i>
-                    <h1 class="text-xl font-extrabold italic tracking-tighter uppercase">Mestre Seguro360</h1>
-                </div>
-                <p class="text-[9px] font-bold text-[#ffb900] uppercase tracking-widest">Marcelo Fernandes | SUSEP: 3H032J</p>
+                <h1 class="text-4xl font-black tracking-tighter leading-none">RIBERA</h1>
+                <p class="text-xs font-bold uppercase tracking-[0.3em] mt-1 text-white/90">Corretora</p>
+                <div class="h-[1px] w-12 bg-amber-400 mx-auto my-3"></div>
+                <p class="text-lg font-medium lowercase tracking-tight text-amber-300">fiança locatícia</p>
             </div>
+            
+            <i data-lucide="shield-check" class="absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
 
         <div class="space-y-4">
-            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
-                <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                    <i data-lucide="user-cog" class="w-3 h-3 porto-text"></i> Atendimento
+
+            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
+                <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
+                    <i data-lucide="user-cog" class="w-3 h-3 porto-text"></i> Perfil de Atendimento
                 </h2>
-                <div class="grid grid-cols-2 gap-2">
-                    <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Cliente</button>
-                    <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Imobiliária</button>
-                </div>
-                <div x-show="userType === 'Imobiliária'" class="mt-3">
-                    <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-semibold porto-text">
-                        <option value="Beth">Beth</option>
-                        <option value="Otalivio">Otalivio</option>
-                        <option value="Paulo">Paulo</option>
-                        <option value="Ribera">Ribera</option>
-                    </select>
+                <div class="grid gap-4">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Cliente</button>
+                        <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Imobiliária</button>
+                    </div>
+                    <div x-show="userType === 'Imobiliária'" x-transition>
+                        <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-semibold porto-text">
+                            <option value="Beth">Atendente Beth</option>
+                            <option value="Otalivio">Atendente Otalivio</option>
+                            <option value="Paulo">Atendente Paulo</option>
+                            <option value="Ribera">Atendente Ribera</option>
+                        </select>
+                    </div>
                 </div>
             </section>
             
-            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400">1. Locatários</h2>
                     <span class="text-[10px] porto-blue px-3 py-1 rounded-full font-black text-white" x-text="tenants.length + '/5'"></span>
@@ -64,7 +66,7 @@
                     <template x-for="(tenant, index) in tenants" :key="index">
                         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
                             <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-md">
-                                <i data-lucide="x" class="w-3 h-3"></i>
+                                <i data-lucide="trash-2" class="w-3 h-3"></i>
                             </button>
                             <div class="grid gap-3">
                                 <input type="text" x-model="tenant.name" placeholder="Nome Completo *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
@@ -82,7 +84,7 @@
                 </div>
             </section>
 
-            <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+            <section class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
                 <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">2. Dados e Valores</h2>
                 <div class="grid gap-3">
                     <div class="grid grid-cols-2 gap-3">
@@ -109,13 +111,15 @@
 
         <footer class="mt-8 text-center pb-10">
             <p class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em]">Ribera Corretora | Marcelo Fernandes</p>
+            <p class="text-[8px] text-slate-300 font-bold uppercase mt-1">SUSEP: 3H032J</p>
         </footer>
     </div>
 
     <script>
         function app() {
             return {
-                userType: 'Cliente', attendantName: 'Atendimento',
+                userType: 'Cliente',
+                attendantName: 'Atendimento',
                 tenants: [{ name: '', cpf: '', email: '', phone: '' }],
                 property: { cep: '', type: 'Residencial' },
                 values: { rent: '' },
@@ -126,13 +130,13 @@
                 maskPhone(e, index) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); v = v.replace(/(\d)(\d{4})$/, '$1-$2'); this.tenants[index].phone = v.substring(0, 15); },
                 maskCEP(e) { let v = e.target.value.replace(/\D/g, ''); v = v.replace(/^(\d{5})(\d)/, '$1-$2'); this.property.cep = v.substring(0, 9); },
                 maskCurrency(e, field) { let v = e.target.value.replace(/\D/g, ''); v = (v / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); this.values[field] = v; },
-                clearForm() { if(confirm('Limpar?')) location.reload(); },
+                clearForm() { if(confirm('Limpar tudo?')) location.reload(); },
                 sendWhatsApp() {
                     const empty = this.tenants.some(t => !t.cpf || !t.email || !t.phone);
                     if (empty || !this.property.cep || !this.values.rent) { alert('Preencha os campos obrigatórios (*)'); return; }
                     let tTxt = '';
-                    this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nCPF: ${t.cpf}\nWhatsApp: ${t.phone}\n\n`; });
-                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nAluguel: ${this.values.rent}`;
+                    this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nNome: ${t.name || '-'}\nCPF: ${t.cpf}\nEmail: ${t.email}\nCel: ${t.phone}\n\n`; });
+                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nTipo: ${this.property.type}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\n\n_Enviado via App Ribera_`;
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
