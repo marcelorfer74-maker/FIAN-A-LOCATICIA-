@@ -28,9 +28,10 @@
                 <div class="h-[1px] w-12 bg-amber-400 mx-auto my-3"></div>
                 <p class="text-lg font-medium lowercase tracking-tight text-amber-300 italic">fiança locatícia</p>
             </div>
+            
             <div class="relative z-10" x-show="isReturnMode">
                 <h1 class="text-2xl font-black tracking-tighter leading-none uppercase text-amber-400">STATUS DA ANÁLISE</h1>
-                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic text-center">Retorno ao Atendimento</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic">Retorno ao Atendimento</p>
             </div>
             <i class="fas fa-shield-halved absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
@@ -38,22 +39,20 @@
         <div class="space-y-4">
             
             <template x-if="isReturnMode">
-                <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 text-center animate-in fade-in zoom-in duration-300">
+                <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 text-center">
                     <i class="fas fa-clipboard-check text-5xl mb-4" style="color: #004691;"></i>
                     <h3 class="font-black text-xl uppercase italic mb-2" style="color: #004691;">Qual o resultado?</h3>
-                    <p class="text-xs text-slate-500 mb-6 uppercase tracking-wider">Cliente: <strong class="text-slate-900" x-text="clientName"></strong><br>Atendente: <strong class="text-slate-900" x-text="attendantName"></strong></p>
+                    <p class="text-xs text-slate-500 mb-6 uppercase">Cliente: <strong class="text-slate-900" x-text="clientName"></strong><br>Atendente: <strong class="text-slate-900" x-text="attendantName"></strong></p>
                     
                     <div class="space-y-3">
-                        <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
                             <i class="fas fa-check-circle text-xl"></i> Aprovado / Contrato
                         </button>
-                        
-                        <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
                             <i class="fas fa-times-circle text-xl"></i> Ficha Recusada
                         </button>
                     </div>
-
-                    <button @click="isReturnMode = false" class="w-full text-slate-400 py-3 mt-4 text-[10px] uppercase font-bold tracking-widest">Voltar ao Início</button>
+                    <button @click="isReturnMode = false" class="w-full text-slate-400 py-3 mt-4 text-[10px] uppercase font-bold tracking-widest">Sair</button>
                 </div>
             </template>
 
@@ -67,7 +66,7 @@
                     </div>
                     
                     <div x-show="userType === 'Imobiliária'" x-transition>
-                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Atendente Ribera</label>
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic">Atendente Ribera</label>
                         <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
                             <option value="Beth">Beth Camargo</option>
                             <option value="Ribera">Ribera (Vendas)</option>
@@ -130,6 +129,9 @@
                 </button>
             </div>
         </div>
+        <footer class="mt-8 text-center pb-10 text-[9px] text-slate-400 font-bold uppercase tracking-widest">
+            Ribera Corretora | Marcelo Fernandes | SUSEP: 3H032J
+        </footer>
     </div>
 
     <script>
@@ -179,13 +181,11 @@
                 confirmReturn(status) {
                     const targetPhone = this.contacts[this.attendantName] || '5515996367478';
                     let msg = '';
-                    
                     if (status === 'aprovado') {
                         msg = `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi concluída com sucesso!\n\n✅ *PROCESSO LIBERADO PARA EMISSÃO DE CONTRATO.*`;
                     } else {
-                        msg = `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nInfelizmente a ficha do cliente *${this.clientName}* não foi aprovada pela seguradora neste momento.\n\n⚠️ *AÇÃO:* Por favor, fale com o Marcelo para analisarmos o motivo ou buscarmos uma alternativa.`;
+                        msg = `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nInfelizmente a ficha do cliente *${this.clientName}* não foi aprovada neste momento.\n\n⚠️ *AÇÃO:* Por favor, fale com o Marcelo para analisarmos o motivo ou buscarmos uma alternativa.`;
                     }
-                    
                     window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
