@@ -18,6 +18,8 @@
         [x-cloak] { display: none !important; }
         .porto-blue { background-color: #004691; }
         .porto-text { color: #004691; }
+        optgroup { font-weight: 800; text-transform: uppercase; color: #004691; background-color: #f1f5f9; }
+        option { font-weight: 400; color: #334155; background-color: white; }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-cloak>
@@ -41,7 +43,7 @@
                     <i class="fas fa-user-cog porto-text"></i> Perfil de Atendimento
                 </h2>
                 <div class="grid grid-cols-2 gap-2 mb-3">
-                    <button type="button" @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
+                    <button type="button" @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-bold uppercase transition-all">Cliente</button>
                     <button type="button" @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
                 </div>
                 
@@ -90,9 +92,21 @@
                 <div class="grid gap-3">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="CEP *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="9">
+                        
                         <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold text-slate-700">
-                            <option value="Residencial">Residencial</option>
-                            <option value="Comercial">Comercial</option>
+                            <optgroup label="Residencial">
+                                <option value="Residencial: Casa">Casa</option>
+                                <option value="Residencial: Apartamento">Apartamento</option>
+                                <option value="Residencial: Condomínio">Condomínio</option>
+                                <option value="Residencial: Outros">Outros</option>
+                            </optgroup>
+                            <optgroup label="Comercial">
+                                <option value="Comercial: Sala">Sala</option>
+                                <option value="Comercial: Salão">Salão</option>
+                                <option value="Comercial: Galpão">Galpão</option>
+                                <option value="Comercial: Sala em condomínio">Sala em condomínio</option>
+                                <option value="Comercial: Outros">Outros</option>
+                            </optgroup>
                         </select>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
@@ -135,7 +149,7 @@
                 userType: 'Cliente',
                 attendantName: 'Atendimento',
                 tenants: [{ name: '', cpf: '', email: '', phone: '' }],
-                property: { cep: '', type: 'Residencial', number: '', complement: '', flexCode: '' },
+                property: { cep: '', type: 'Residencial: Casa', number: '', complement: '', flexCode: '' },
                 values: { rent: '', iptu: '', condo: '' },
                 
                 addTenant() { if (this.tenants.length < 5) this.tenants.push({ name: '', cpf: '', email: '', phone: '' }); },
@@ -165,7 +179,7 @@
                     if (empty || !this.property.cep || !this.values.rent) return alert('Por favor, preencha os campos obrigatórios (*)');
                     let tTxt = '';
                     this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nNome: ${t.name || '-'}\nCPF: ${t.cpf}\nEmail: ${t.email}\nCel: ${t.phone}\n\n`; });
-                    const msg = `*COTAÇÃO: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nTipo: ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\nFlex: ${this.property.flexCode || '-'}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\nIPTU: ${this.values.iptu || 'R$ 0'}\nCond: ${this.values.condo || 'R$ 0'}\n\n_Enviado via App Ribera Seguros_`;
+                    const msg = `*COTAÇÃO: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nTipo: ${this.property.type}\nNº: ${this.property.number || '-'}\nFlex: ${this.property.flexCode || '-'}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\nIPTU: ${this.values.iptu || 'R$ 0'}\nCond: ${this.values.condo || 'R$ 0'}\n\n_Enviado via App Ribera_`;
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
