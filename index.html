@@ -14,9 +14,10 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
-        input:focus { outline: none; border-color: #004691; border-width: 2px; }
+        input:focus, select:focus { outline: none; border-color: #004691; border-width: 2px; }
         [x-cloak] { display: none !important; }
         .porto-blue { background-color: #004691; }
+        .porto-text { color: #004691; }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-cloak>
@@ -37,18 +38,21 @@
 
             <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                 <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
-                    <i class="fas fa-user-cog text-[#004691]"></i> Perfil de Atendimento
+                    <i class="fas fa-user-cog porto-text"></i> Perfil de Atendimento
                 </h2>
                 <div class="grid grid-cols-2 gap-2 mb-3">
-                    <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
-                    <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
+                    <button type="button" @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
+                    <button type="button" @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-50 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
                 </div>
-                <div x-show="userType === 'Imobiliária'" x-transition>
-                    <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-semibold porto-blue text-white">
-                        <option value="Beth">Atendente Beth</option>
-                        <option value="Otalivio">Atendente Otalivio</option>
-                        <option value="Paulo">Atendente Paulo</option>
-                        <option value="Ribera">Atendente Ribera</option>
+                
+                <div x-show="userType === 'Imobiliária'" x-transition class="mt-2">
+                    <label class="text-[9px] font-bold text-slate-400 uppercase ml-1">Selecione o Atendente</label>
+                    <select x-model="attendantName" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold text-slate-700 mt-1 appearance-none">
+                        <option value="Beth">Beth</option>
+                        <option value="Otalivio">Otalivio</option>
+                        <option value="Paulo">Paulo</option>
+                        <option value="Ribera">Ribera</option>
+                        <option value="Atendimento">Atendimento Geral</option>
                     </select>
                 </div>
             </section>
@@ -62,7 +66,7 @@
                 <div class="space-y-4">
                     <template x-for="(tenant, index) in tenants" :key="index">
                         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
-                            <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-md border active:scale-90">
+                            <button type="button" @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-md border active:scale-90">
                                 <i class="fas fa-trash-can text-xs"></i>
                             </button>
                             <div class="grid gap-3">
@@ -75,7 +79,7 @@
                             </div>
                         </div>
                     </template>
-                    <button @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase flex items-center justify-center gap-2">
+                    <button type="button" @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase flex items-center justify-center gap-2">
                         <i class="fas fa-plus"></i> Adicionar Locatário
                     </button>
                 </div>
@@ -86,7 +90,7 @@
                 <div class="grid gap-3">
                     <div class="grid grid-cols-2 gap-3">
                         <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="CEP *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="9">
-                        <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold">
+                        <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold text-slate-700">
                             <option value="Residencial">Residencial</option>
                             <option value="Comercial">Comercial</option>
                         </select>
@@ -112,10 +116,10 @@
             </section>
 
             <div class="pt-4 space-y-3">
-                <button @click="sendWhatsApp" class="w-full porto-blue text-white py-5 rounded-3xl font-black uppercase italic shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                <button type="button" @click="sendWhatsApp" class="w-full porto-blue text-white py-5 rounded-3xl font-black uppercase italic shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
                     <i class="fab fa-whatsapp text-xl"></i> Solicitar via Ribera
                 </button>
-                <button @click="clearForm" class="w-full text-slate-300 py-2 font-bold text-[9px] uppercase tracking-widest text-center">Resetar Formulário</button>
+                <button type="button" @click="clearForm" class="w-full text-slate-300 py-2 font-bold text-[9px] uppercase tracking-widest text-center">Resetar Formulário</button>
             </div>
         </div>
 
@@ -128,7 +132,8 @@
     <script>
         function app() {
             return {
-                userType: 'Cliente', attendantName: 'Atendimento',
+                userType: 'Cliente',
+                attendantName: 'Atendimento',
                 tenants: [{ name: '', cpf: '', email: '', phone: '' }],
                 property: { cep: '', type: 'Residencial', number: '', complement: '', flexCode: '' },
                 values: { rent: '', iptu: '', condo: '' },
@@ -157,10 +162,10 @@
                 clearForm() { if(confirm('Limpar todos os campos?')) location.reload(); },
                 sendWhatsApp() {
                     const empty = this.tenants.some(t => !t.cpf || !t.email || !t.phone);
-                    if (empty || !this.property.cep || !this.values.rent) return alert('Por favor, preencha os campos com *');
+                    if (empty || !this.property.cep || !this.values.rent) return alert('Por favor, preencha os campos obrigatórios (*)');
                     let tTxt = '';
                     this.tenants.forEach((t, i) => { tTxt += `👤 *LOCATÁRIO ${i+1}:*\nNome: ${t.name || '-'}\nCPF: ${t.cpf}\nEmail: ${t.email}\nCel: ${t.phone}\n\n`; });
-                    const msg = `*COTAÇÃO: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\nFlex: ${this.property.flexCode || '-'}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\nIPTU: ${this.values.iptu || 'R$ 0'}\nCond: ${this.values.condo || 'R$ 0'}\n\n_Enviado via App Ribera_`;
+                    const msg = `*COTAÇÃO: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:*\nTipo: ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\nFlex: ${this.property.flexCode || '-'}\n\n💰 *VALORES:*\nAluguel: ${this.values.rent}\nIPTU: ${this.values.iptu || 'R$ 0'}\nCond: ${this.values.condo || 'R$ 0'}\n\n_Enviado via App Ribera Seguros_`;
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
