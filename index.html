@@ -6,15 +6,18 @@
     <title>Ribera Fiança - Fluxo 360</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#004691">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
         input:focus, select:focus { outline: none; border-color: #004691; border-width: 2px; }
         [x-cloak] { display: none !important; }
         .porto-blue { background-color: #004691; }
+        .porto-text { color: #004691; }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-init="checkReturn()" x-cloak>
@@ -30,30 +33,31 @@
             </div>
             <div class="relative z-10" x-show="isReturnMode">
                 <h1 class="text-2xl font-black tracking-tighter leading-none uppercase text-amber-400">RETORNO DE BIOMETRIA</h1>
-                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white">Finalizando Processo</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic">Confirmando com Atendente</p>
             </div>
+            <i class="fas fa-shield-halved absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
 
         <div class="space-y-4">
 
             <template x-if="isReturnMode">
-                <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 animate-bounce-in">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-fingerprint text-5xl porto-text mb-4"></i>
-                        <h3 class="font-black text-xl porto-text uppercase italic">Confirmar Biometria?</h3>
-                        <p class="text-xs text-slate-500 mt-2">Você está devolvendo este processo para: <br><strong class="text-slate-900" x-text="attendantName"></strong></p>
-                    </div>
-                    <button @click="confirmReturn()" class="w-full porto-blue text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
-                        <i class="fas fa-check-circle text-xl"></i> Sim, Avisar Atendente
+                <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 text-center">
+                    <i class="fas fa-fingerprint text-5xl porto-text mb-4"></i>
+                    <h3 class="font-black text-xl porto-text uppercase italic">Biometria Concluída?</h3>
+                    <p class="text-xs text-slate-500 mt-2 mb-6">Avisar agora: <strong class="text-slate-900" x-text="attendantName"></strong> <br>Sobre o cliente: <strong class="text-slate-900" x-text="clientName"></strong></p>
+                    
+                    <button @click="confirmReturn()" class="w-full porto-blue text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        <i class="fas fa-check-circle text-xl"></i> Sim, Liberar Contrato
                     </button>
-                    <button @click="isReturnMode = false" class="w-full text-slate-300 py-3 mt-2 font-bold text-[10px] uppercase">Cancelar</button>
+                    <button @click="isReturnMode = false" class="w-full text-slate-300 py-3 mt-2 font-bold text-[10px] uppercase">Voltar ao Início</button>
                 </div>
             </template>
 
             <div x-show="!isReturnMode" class="space-y-4">
+                
                 <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                     <h2 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-400 mb-4">
-                        <i class="fas fa-user-tie text-[#004691]"></i> Atendimento Origem
+                        <i class="fas fa-user-tie porto-text"></i> Atendente de Origem
                     </h2>
                     <select x-model="attendantName" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700">
                         <option value="Beth">Beth Camargo</option>
@@ -72,11 +76,12 @@
                     <template x-for="(tenant, index) in tenants" :key="index">
                         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative mb-4">
                             <button @click="removeTenant(index)" x-show="tenants.length > 1" class="absolute -top-2 -right-2 bg-white text-red-500 p-2 rounded-full shadow-md border"><i class="fas fa-trash-can text-xs"></i></button>
-                            <input type="text" x-model="tenant.name" placeholder="Nome Completo *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm mb-2">
+                            <input type="text" x-model="tenant.name" placeholder="Nome Completo *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm mb-2 uppercase">
                             <div class="grid grid-cols-2 gap-2">
                                 <input type="tel" x-model="tenant.cpf" @input="maskCPF($event, index)" placeholder="CPF *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="14">
                                 <input type="tel" x-model="tenant.phone" @input="maskPhone($event, index)" placeholder="WhatsApp *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="15">
                             </div>
+                            <input type="email" x-model="tenant.email" placeholder="E-mail *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm mt-2">
                         </div>
                     </template>
                     <button @click="addTenant" x-show="tenants.length < 5" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 text-[10px] font-black uppercase flex items-center justify-center gap-2"><i class="fas fa-plus"></i> Novo Locatário</button>
@@ -88,17 +93,40 @@
                         <div class="grid grid-cols-2 gap-3">
                             <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="CEP *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="9">
                             <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold text-slate-700">
-                                <optgroup label="Residencial"><option>Casa</option><option>Apartamento</option></optgroup>
-                                <optgroup label="Comercial"><option>Sala</option><option>Salão</option><option>Galpão</option></optgroup>
+                                <optgroup label="Residencial"><option>Casa</option><option>Apartamento</option><option>Condomínio</option><option>Outros</option></optgroup>
+                                <optgroup label="Comercial"><option>Sala</option><option>Salão</option><option>Galpão</option><option>Sala em Cond.</option><option>Outros</option></optgroup>
                             </select>
                         </div>
-                        <input type="tel" x-model="values.rent" @input="maskCurrency($event, 'rent')" placeholder="Aluguel R$ *" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-4 text-xl font-black porto-text" inputmode="numeric">
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="text" x-model="property.number" placeholder="Número" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                            <input type="text" x-model="property.complement" placeholder="Apto/Sala" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                        </div>
+                        <input type="text" x-model="property.flexCode" placeholder="Código Flex (Porto)" class="w-full bg-amber-50 border border-amber-100 rounded-xl px-3 py-3 text-sm italic">
+                    </div>
+                </section>
+
+                <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                    <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">3. Valores Mensais</h2>
+                    <div class="grid gap-3">
+                        <label class="text-[9px] font-black porto-text uppercase ml-1 italic">Aluguel Bruto *</label>
+                        <input type="tel" x-model="values.rent" @input="maskCurrency($event, 'rent')" placeholder="R$ 0,00" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-4 text-xl font-black porto-text" inputmode="numeric">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[8px] font-bold text-slate-400 uppercase ml-1 italic">IPTU Mensal</label>
+                                <input type="tel" x-model="values.iptu" @input="maskCurrency($event, 'iptu')" placeholder="R$ 0,00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
+                            </div>
+                            <div>
+                                <label class="text-[8px] font-bold text-slate-400 uppercase ml-1 italic">Condomínio</label>
+                                <input type="tel" x-model="values.condo" @input="maskCurrency($event, 'condo')" placeholder="R$ 0,00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" inputmode="numeric">
+                            </div>
+                        </div>
                     </div>
                 </section>
 
                 <button @click="sendToMarcelo" class="w-full porto-blue text-white py-5 rounded-3xl font-black uppercase italic shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
                     <i class="fab fa-whatsapp text-xl"></i> Enviar p/ Marcelo
                 </button>
+                <button @click="clearForm" class="w-full text-slate-300 py-2 font-bold text-[9px] uppercase tracking-widest text-center">Resetar Formulário</button>
             </div>
         </div>
 
@@ -111,14 +139,12 @@
         function app() {
             return {
                 attendantName: 'Beth',
-                userType: 'Cliente',
-                tenants: [{ name: '', cpf: '', phone: '' }],
-                property: { cep: '', type: 'Casa' },
-                values: { rent: '' },
+                tenants: [{ name: '', cpf: '', phone: '', email: '' }],
+                property: { cep: '', type: 'Casa', number: '', complement: '', flexCode: '' },
+                values: { rent: '', iptu: '', condo: '' },
                 isReturnMode: false,
                 clientName: '',
 
-                // Lista de Contatos Ribera
                 contacts: {
                     'Beth': '5515988407007',
                     'Ribera': '5515997489093',
@@ -136,7 +162,7 @@
                     }
                 },
 
-                addTenant() { if (this.tenants.length < 5) this.tenants.push({ name: '', cpf: '', phone: '' }); },
+                addTenant() { if (this.tenants.length < 5) this.tenants.push({ name: '', cpf: '', phone: '', email: '' }); },
                 removeTenant(index) { this.tenants.splice(index, 1); },
                 maskCPF(e, index) { let v = e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.tenants[index].cpf = v.substring(0, 14); },
                 maskPhone(e, index) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'); this.tenants[index].phone = v.substring(0, 15); },
@@ -149,9 +175,14 @@
                     const returnLink = `${baseUrl}?retorno=1&atendente=${this.attendantName}&cliente=${encodeURIComponent(firstTenant)}`;
                     
                     let tTxt = '';
-                    this.tenants.forEach((t, i) => { tTxt += `👤 *LOC ${i+1}:* ${t.name}\nCPF: ${t.cpf}\nWhats: ${t.phone}\n\n`; });
+                    this.tenants.forEach((t, i) => { 
+                        tTxt += `👤 *LOC ${i+1}:* ${t.name.toUpperCase()}\nCPF: ${t.cpf}\nWhats: ${t.phone}\nEmail: ${t.email}\n\n`; 
+                    });
                     
-                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nAluguel: ${this.values.rent}\n\n----------------------------\n✅ *MARCELO, APÓS A BIOMETRIA CLIQUE NO LINK ABAIXO PARA DEVOLVER O STATUS:*\n👉 ${returnLink}`;
+                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.attendantName}\n\n${tTxt}` +
+                                `🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\nCompl: ${this.property.complement || '-'}\nFlex: ${this.property.flexCode || '-'}\n\n` +
+                                `💰 *VALORES:* \nAluguel: ${this.values.rent}\nIPTU: ${this.values.iptu || 'R$ 0,00'}\nCond: ${this.values.condo || 'R$ 0,00'}\n\n` +
+                                `----------------------------\n✅ *MARCELO, APÓS A BIOMETRIA CLIQUE NO LINK ABAIXO PARA DEVOLVER O STATUS:*\n👉 ${returnLink}`;
                     
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 },
@@ -160,7 +191,8 @@
                     const targetPhone = this.contacts[this.attendantName];
                     const msg = `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi realizada com sucesso!\n\n✅ *PROCESSO LIBERADO PARA EMISSÃO DE CONTRATO.*`;
                     window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-                }
+                },
+                clearForm() { if(confirm('Limpar tudo?')) location.reload(); }
             }
         }
     </script>
