@@ -17,7 +17,7 @@
         .porto-blue { background-color: #004691; }
     </style>
 </head>
-<body class="min-h-screen pb-10" x-data="app()" x-init="checkReturn()" x-cloak>
+<body class="min-h-screen pb-10" x-data="app()" x-init="checkParams()" x-cloak>
 
     <div class="max-w-md mx-auto px-4 pt-6">
         
@@ -31,47 +31,46 @@
             
             <div class="relative z-10" x-show="isReturnMode">
                 <h1 class="text-2xl font-black tracking-tighter leading-none uppercase text-amber-400">STATUS DA ANÁLISE</h1>
-                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic">Retorno ao Atendimento</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic text-center">Retorno ao Atendimento</p>
             </div>
             <i class="fas fa-shield-halved absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
 
         <div class="space-y-4">
-            
             <template x-if="isReturnMode">
                 <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 text-center">
                     <i class="fas fa-reply text-5xl mb-4" style="color: #004691;"></i>
-                    <h3 class="font-black text-xl uppercase italic mb-2" style="color: #004691;">Informar Resultado</h3>
-                    <p class="text-xs text-slate-500 mb-6 uppercase">Enviar para: <strong class="text-slate-900" x-text="attendantName"></strong><br>Cliente: <strong class="text-slate-900" x-text="clientName"></strong></p>
-                    
+                    <h3 class="font-black text-xl uppercase italic mb-2" style="color: #004691;">Qual o resultado?</h3>
+                    <p class="text-xs text-slate-500 mb-6 uppercase tracking-wider">Atendente: <strong class="text-slate-900" x-text="attendantName"></strong><br>Cliente: <strong class="text-slate-900" x-text="clientName"></strong></p>
                     <div class="space-y-3">
-                        <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
                             <i class="fas fa-check-circle text-xl"></i> Aprovado / Contrato
                         </button>
-                        <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-all">
+                        <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
                             <i class="fas fa-times-circle text-xl"></i> Ficha Recusada
                         </button>
                     </div>
+                    <button @click="isReturnMode = false" class="w-full text-slate-300 py-3 mt-4 text-[10px] uppercase font-bold tracking-widest">Sair</button>
                 </div>
             </template>
 
             <div x-show="!isReturnMode" class="space-y-4">
-                
                 <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                     <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Origem do Atendimento</h2>
                     <div class="grid grid-cols-2 gap-2 mb-4">
-                        <button @click="userType = 'Cliente'; attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
+                        <button @click="userType = 'Cliente'; if(!fixedAttendant) attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
                         <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
                     </div>
                     
-                    <div x-show="userType === 'Imobiliária'" x-transition>
-                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic">Atendente Ribera</label>
-                        <select x-model="attendantName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
+                    <div x-show="userType === 'Imobiliária' || fixedAttendant" x-transition>
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic">Atendente Responsável</label>
+                        <select x-model="attendantName" :disabled="fixedAttendant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1 disabled:opacity-75">
                             <option value="Beth">Beth Camargo</option>
                             <option value="Ribera">Ribera (Vendas)</option>
-                            <option value="Paulo">PAULO</option>
-                            <option value="Otalivio">OTÁLIVIO</option>
-                            <option value="Geral">ATENDIMENTO GERAL</option>
+                            <option value="Paulo">Paulo</option>
+                            <option value="Otalivio">Otálivio</option>
+                            <option value="Geral">Atendimento Geral</option>
+                            <option value="Atendimento">Atendimento Marcelo</option>
                         </select>
                     </div>
                 </section>
@@ -110,7 +109,7 @@
                             <input type="text" x-model="property.complement" placeholder="Comp./Apto" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
-                            <input type="text" x-model="property.internalCode" placeholder="Cód. Imobiliária" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm italic text-blue-600 font-bold">
+                            <input type="text" x-model="property.internalCode" placeholder="Cód. Imobiliária" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm italic">
                             <input type="text" x-model="property.flexCode" placeholder="Cód. Flex Porto" class="w-full bg-amber-50 border border-amber-100 rounded-xl px-3 py-3 text-sm italic">
                         </div>
                         <div class="h-[1px] bg-slate-100 my-2"></div>
@@ -133,24 +132,28 @@
     <script>
         function app() {
             return {
-                userType: 'Cliente', attendantName: 'Beth',
+                userType: 'Cliente', attendantName: 'Atendimento', fixedAttendant: false,
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
                 values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
+                contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478' },
                 
-                // MAPA DE CONTATOS REAL DA EQUIPE
-                contacts: { 
-                    'Beth': '5515988407007', 
-                    'Ribera': '5515997489093', 
-                    'Paulo': '5515992791441', 
-                    'Otalivio': '5515996007933', 
-                    'Geral': '551532321545',
-                    'Atendimento': '551532321545' // Esse é o seu
-                },
-                
-                checkReturn() {
+                checkParams() {
                     const urlParams = new URLSearchParams(window.location.search);
-                    if (urlParams.has('retorno')) { this.isReturnMode = true; this.attendantName = urlParams.get('atendente'); this.clientName = urlParams.get('cliente'); }
+                    // Checa se é modo retorno
+                    if (urlParams.has('retorno')) {
+                        this.isReturnMode = true;
+                        this.attendantName = urlParams.get('atendente');
+                        this.clientName = urlParams.get('cliente');
+                    } 
+                    // Checa se o link veio de um atendente específico (Ex: ?atendente=Beth)
+                    else if (urlParams.has('atendente')) {
+                        const nome = urlParams.get('atendente');
+                        if (this.contacts[nome]) {
+                            this.attendantName = nome;
+                            this.fixedAttendant = true; // Trava o nome no formulário
+                        }
+                    }
                 },
                 addTenant() { if (this.tenants.length < 5) this.tenants.push({ name: '', cpf: '', phone: '', email: '' }); },
                 removeTenant(index) { if(this.tenants.length > 1) this.tenants.splice(index, 1); },
@@ -180,20 +183,17 @@
                                 `💰 *VALORES:* Aluguel: ${this.values.rent}\nIPTU: ${this.values.iptu || 'R$ 0,00'}\nCond: ${this.values.condo || 'R$ 0,00'}\n\n` +
                                 `✅ *RETORNO STATUS/BIOMETRIA:*\n👉 ${returnLink}`;
 
-                    // SEMPRE envia para o Marcelo (final 7478)
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 },
 
                 confirmReturn(status) {
-                    // Pega o número do atendente que iniciou a ficha
                     const targetPhone = this.contacts[this.attendantName];
                     let msg = '';
                     if (status === 'aprovado') {
                         msg = `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi concluída com sucesso!\n\n✅ *PROCESSO LIBERADO PARA EMISSÃO DE CONTRATO.*`;
                     } else {
-                        msg = `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nInfelizmente a ficha do cliente *${this.clientName}* não foi aprovada neste momento.\n\n⚠️ *AÇÃO:* Por favor, entre em contato com o Marcelo para analisarmos o motivo.`;
+                        msg = `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nInfelizmente a ficha do cliente *${this.clientName}* não foi aprovada neste momento.\n\n⚠️ *AÇÃO:* Por favor, fale com o Marcelo para analisarmos o motivo.`;
                     }
-                    // Envia o retorno para o número do Atendente
                     window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
