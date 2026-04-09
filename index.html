@@ -31,7 +31,7 @@
             
             <div class="relative z-10" x-show="isReturnMode">
                 <h1 class="text-2xl font-black tracking-tighter leading-none uppercase text-amber-400">STATUS DA ANÁLISE</h1>
-                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic text-center">Gestão de Etapas</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest mt-2 text-white italic text-center">Retorno ao Atendimento</p>
             </div>
             <i class="fas fa-shield-halved absolute -right-4 -bottom-4 w-24 h-24 opacity-10 rotate-12 text-white"></i>
         </header>
@@ -39,50 +39,34 @@
         <div class="space-y-4">
             
             <template x-if="isReturnMode">
-                <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 space-y-4">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-tasks text-4xl porto-blue mb-2" style="color: #004691;"></i>
-                        <h3 class="font-black text-lg uppercase porto-text" style="color: #004691;">Atualizar Andamento</h3>
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest">Cliente: <strong class="text-slate-900" x-text="clientName"></strong></p>
-                    </div>
-
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-3">
-                        <p class="text-[10px] font-black porto-text uppercase tracking-widest text-center">1. Enviar Proposta para Aprovação</p>
-                        <select x-model="returnFlow.seguradora" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold">
-                            <option value="PORTO">PORTO SEGURO</option>
-                            <option value="TOKIO MARINE">TOKIO MARINE</option>
-                        </select>
-                        <input type="tel" x-model="returnFlow.valorMensal" @input="maskCurrency($event, 'returnFlowVal')" placeholder="Valor Mensal do Seguro R$" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold">
-                        <button @click="confirmReturn('proposta')" class="w-full porto-blue text-white py-3 rounded-xl font-black uppercase text-[10px] italic shadow-md">
-                            Enviar Proposta ao Atendente
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-2">
-                        <button @click="confirmReturn('biometria')" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black uppercase text-[10px] italic flex items-center justify-center gap-2">
-                            <i class="fas fa-fingerprint"></i> Solicitar Biometria (Valor Aceito)
-                        </button>
-                        <button @click="confirmReturn('finalizado')" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-black uppercase text-[10px] italic flex items-center justify-center gap-2">
-                            <i class="fas fa-check-double"></i> Biometria OK - Liberar Contrato
-                        </button>
-                        <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-4 rounded-xl font-black uppercase text-[10px] italic flex items-center justify-center gap-2">
-                            <i class="fas fa-times-circle"></i> Ficha Recusada
-                        </button>
-                    </div>
+                <div class="bg-white p-6 rounded-3xl shadow-xl border-2 border-amber-400 text-center">
+                    <i class="fas fa-paper-plane text-5xl mb-4" style="color: #004691;"></i>
+                    <h3 class="font-black text-xl uppercase italic mb-2" style="color: #004691;">Resultado da Ficha</h3>
+                    <p class="text-xs text-slate-500 mb-6 uppercase">Cliente: <strong class="text-slate-900" x-text="clientName"></strong></p>
                     
-                    <button @click="isReturnMode = false" class="w-full text-slate-300 py-2 text-[9px] uppercase font-bold tracking-widest text-center">Voltar ao Formulário</button>
+                    <div class="space-y-3">
+                        <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
+                            <i class="fas fa-check-circle text-xl"></i> Aprovado / Contrato
+                        </button>
+                        <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
+                            <i class="fas fa-times-circle text-xl"></i> Ficha Recusada
+                        </button>
+                    </div>
+                    <button @click="isReturnMode = false" class="w-full text-slate-400 py-3 mt-4 text-[10px] uppercase font-bold">Voltar ao Início</button>
                 </div>
             </template>
 
             <div x-show="!isReturnMode" class="space-y-4">
+                
                 <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                     <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 font-bold">Origem</h2>
                     <div class="grid grid-cols-2 gap-2 mb-4">
                         <button @click="userType = 'Cliente'; if(!fixedAttendant) attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
                         <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
                     </div>
-                    <div x-show="userType === 'Imobiliária' || fixedAttendant">
-                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic">Atendente Ribera</label>
+                    
+                    <div x-show="userType === 'Imobiliária' || fixedAttendant" x-transition>
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic font-bold">Atendente Ribera</label>
                         <select x-model="attendantName" :disabled="fixedAttendant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
                             <option value="Beth">Beth Camargo</option>
                             <option value="Ribera">Ribera (Vendas)</option>
@@ -92,7 +76,7 @@
                         </select>
                     </div>
                 </section>
-
+                
                 <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                     <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 font-bold">1. Locatários</h2>
                     <template x-for="(tenant, index) in tenants" :key="index">
@@ -115,15 +99,31 @@
                         <div class="grid grid-cols-2 gap-3">
                             <input type="tel" x-model="property.cep" @input="maskCEP($event)" placeholder="CEP *" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="9">
                             <select x-model="property.type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm font-bold text-slate-700">
-                                <optgroup label="Residencial"><option>Casa</option><option>Apartamento</option></optgroup>
-                                <optgroup label="Comercial"><option>Sala</option><option>Salão</option><option>Galpão</option></optgroup>
+                                <optgroup label="Residencial"><option value="Casa">Casa</option><option value="Apartamento">Apartamento</option></optgroup>
+                                <optgroup label="Comercial"><option value="Sala">Sala</option><option value="Salão">Salão</option><option value="Galpão">Galpão</option></optgroup>
                             </select>
                         </div>
-                        
-                        <div x-show="['Sala', 'Salão', 'Galpão'].includes(property.type)" class="bg-blue-50 p-4 rounded-2xl border border-blue-100 space-y-3" x-transition>
-                            <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Possui CNPJ?</label>
-                            <div class="grid grid-cols-2 gap-2"><button @click="comercial.hasCNPJ = true" :class="comercial.hasCNPJ ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase">Sim</button><button @click="comercial.hasCNPJ = false" :class="!comercial.hasCNPJ ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase">Não</button></div>
-                            <div x-show="comercial.hasCNPJ" class="space-y-2"><input type="tel" x-model="comercial.cnpj" @input="maskCNPJ($event)" placeholder="CNPJ *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="18"><input type="tel" x-model="comercial.cpfTitular" @input="maskCPFTitular($event)" placeholder="CPF Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="14"></div>
+
+                        <div x-show="isComercial()" x-transition class="bg-blue-50 p-4 rounded-2xl border border-blue-100 space-y-3">
+                            <p class="text-[10px] font-black porto-text uppercase tracking-widest text-center">Empresa Responsável</p>
+                            <div>
+                                <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Possui CNPJ?</label>
+                                <div class="grid grid-cols-2 gap-2 mt-1">
+                                    <button @click="comercial.hasCNPJ = true" :class="comercial.hasCNPJ ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Sim</button>
+                                    <button @click="comercial.hasCNPJ = false" :class="!comercial.hasCNPJ ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Não</button>
+                                </div>
+                            </div>
+                            <div x-show="comercial.hasCNPJ" class="grid grid-cols-2 gap-2" x-transition>
+                                <input type="tel" x-model="comercial.cnpj" @input="maskCNPJ($event)" placeholder="CNPJ *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="18">
+                                <input type="text" x-model="comercial.abertura" placeholder="Tempo Abertura *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                            </div>
+                            <div x-show="comercial.hasCNPJ" class="space-y-2" x-transition>
+                                <input type="tel" x-model="comercial.cpfTitular" @input="maskCPFTitular($event)" placeholder="CPF Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="14">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="tel" x-model="comercial.celTitular" @input="maskCelTitular($event)" placeholder="Celular Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="15">
+                                    <input type="email" x-model="comercial.emailTitular" placeholder="E-mail Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm uppercase">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
@@ -156,52 +156,60 @@
                 userType: 'Imobiliária', attendantName: 'Beth', fixedAttendant: false,
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
-                comercial: { hasCNPJ: false, cnpj: '', cpfTitular: '' },
-                values: { rent: '', iptu: '', condo: '' },
-                returnFlow: { seguradora: 'PORTO', valorMensal: '' },
-                isReturnMode: false, clientName: '',
+                comercial: { hasCNPJ: false, cnpj: '', abertura: '', cpfTitular: '', celTitular: '', emailTitular: '' },
+                values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
+                contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478' },
                 
+                isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
                 checkParams() {
                     const urlParams = new URLSearchParams(window.location.search);
-                    if (urlParams.has('retorno')) { this.isReturnMode = true; this.attendantName = urlParams.get('atendente'); this.clientName = urlParams.get('cliente'); }
-                    else if (urlParams.has('atendente')) { this.attendantName = urlParams.get('atendente'); this.fixedAttendant = true; }
+                    if (urlParams.has('retorno')) {
+                        this.isReturnMode = true;
+                        this.attendantName = urlParams.get('atendente');
+                        this.clientName = urlParams.get('cliente');
+                    } else if (urlParams.has('atendente')) {
+                        this.attendantName = urlParams.get('atendente');
+                        this.fixedAttendant = true;
+                    }
                 },
-
                 addTenant() { if (this.tenants.length < 5) this.tenants.push({ name: '', cpf: '', phone: '', email: '' }); },
                 removeTenant(index) { if(this.tenants.length > 1) this.tenants.splice(index, 1); },
                 maskCPF(e, i) { let v = e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.tenants[i].cpf = v.substring(0,14); },
                 maskPhone(e, i) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'); this.tenants[i].phone = v.substring(0,15); },
                 maskCNPJ(e) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); this.comercial.cnpj = v.substring(0,18); },
                 maskCPFTitular(e) { let v = e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.comercial.cpfTitular = v.substring(0,14); },
+                maskCelTitular(e) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'); this.comercial.celTitular = v.substring(0,15); },
                 maskCEP(e) { this.property.cep = e.target.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2').substring(0,9); },
-                maskCurrency(e, f) { 
-                    let val = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); 
-                    if(f === 'returnFlowVal') this.returnFlow.valorMensal = val; else this.values[f] = val;
-                },
-
+                maskCurrency(e, f) { this.values[f] = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); },
+                
                 sendToMarcelo() {
-                    if (!this.tenants[0].cpf || !this.tenants[0].email || !this.property.cep || !this.values.rent) return alert('⚠️ Informe CPF, E-mail, CEP e Aluguel.');
+                    if (!this.tenants[0].cpf || !this.tenants[0].email || !this.property.cep || !this.values.rent) {
+                        alert('⚠️ Informe CPF, E-mail, CEP e Aluguel do titular.'); return;
+                    }
+                    if (this.isComercial() && this.comercial.hasCNPJ && (!this.comercial.cnpj || !this.comercial.cpfTitular)) {
+                        alert('⚠️ Para análise com CNPJ, informe o número do CNPJ e o CPF do Titular.'); return;
+                    }
+
                     const firstTenant = this.tenants[0].name || 'Cliente';
                     const baseUrl = window.location.href.split('?')[0];
                     const returnLink = `${baseUrl}?retorno=1&atendente=${this.attendantName}&cliente=${encodeURIComponent(firstTenant)}`;
+                    
                     let tTxt = '';
                     this.tenants.forEach((t, i) => { if(t.cpf) tTxt += `👤 *LOC ${i+1}:* ${t.name.toUpperCase()}\nCPF: ${t.cpf}\nWhats: ${t.phone}\nE-mail: ${t.email.toLowerCase()}\n\n`; });
-                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n\n✅ *RETORNO STATUS:* ${returnLink}`;
+                    
+                    let comTxt = '';
+                    if(this.isComercial()){
+                        comTxt = `🏢 *COMERCIAL:*\nCNPJ: ${this.comercial.hasCNPJ ? this.comercial.cnpj : 'NÃO POSSUI'}\nTempo: ${this.comercial.abertura || '-'}\n` +
+                                 (this.comercial.hasCNPJ ? `Titular CPF: ${this.comercial.cpfTitular}\nTitular Cel: ${this.comercial.celTitular}\nTitular Email: ${this.comercial.emailTitular}\n\n` : '');
+                    }
+
+                    const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
+                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
                     window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 },
 
                 confirmReturn(status) {
-                    let msg = '';
-                    if (status === 'proposta') {
-                        if(!this.returnFlow.valorMensal) return alert('⚠️ Informe o valor da proposta.');
-                        msg = `*📢 RETORNO RIBERA (PROPOSTA)*\n\nOlá *${this.attendantName}*,\nFicha do cliente *${this.clientName}* foi pré-aprovada!\n\n📋 *PROPOSTA:* \nSeguradora: ${this.returnFlow.seguradora}\nValor Mensal: ${this.returnFlow.valorMensal}\n\n👉 *AÇÃO:* Envie ao cliente para aprovação. Se ele aceitar, me avise para gerarmos a biometria.`;
-                    } else if (status === 'biometria') {
-                        msg = `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nO valor da proposta foi aceito pelo cliente *${this.clientName}*.\n\n📸 *AÇÃO:* Estou gerando o link de biometria agora e enviarei ao cliente. Favor orientá-lo.`;
-                    } else if (status === 'finalizado') {
-                        msg = `*📢 RETORNO RIBERA (CONTRATO)*\n\nOlá *${this.attendantName}*,\nBiometria concluída com sucesso para *${this.clientName}*!\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO IMOBILIÁRIO.*`;
-                    } else {
-                        msg = `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
-                    }
+                    let msg = (status === 'aprovado') ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi concluída!\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*` : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
