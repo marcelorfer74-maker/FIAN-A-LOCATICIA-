@@ -43,6 +43,30 @@
                     <i class="fas fa-paper-plane text-5xl mb-4" style="color: #004691;"></i>
                     <h3 class="font-black text-xl uppercase italic mb-2" style="color: #004691;">Resultado da Ficha</h3>
                     <p class="text-xs text-slate-500 mb-6 uppercase">Cliente: <strong class="text-slate-900" x-text="clientName"></strong></p>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 mb-6 text-left">
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Seguradora</label>
+                            <select x-model="returnForm.insurer" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
+                                <option value="">Selecione</option>
+                                <option value="Porto Seguro">Porto Seguro</option>
+                                <option value="Pottencial">Pottencial</option>
+                                <option value="Too Seguros">Too Seguros</option>
+                                <option value="Loovi">Loovi</option>
+                                <option value="Outra">Outra</option>
+                            </select>
+                        </div>
+
+                        <div x-show="returnForm.insurer === 'Outra'" x-transition>
+                            <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Qual seguradora?</label>
+                            <input type="text" x-model="returnForm.customInsurer" placeholder="Digite o nome da seguradora" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-4 text-sm mt-1 uppercase font-semibold">
+                        </div>
+
+                        <div>
+                            <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Valor Mensal do Seguro</label>
+                            <input type="tel" x-model="returnForm.monthlyValue" @input="maskReturnCurrency($event)" placeholder="R$ 0,00" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-4 text-sm mt-1 font-bold text-slate-700">
+                        </div>
+                    </div>
                     
                     <div class="space-y-3">
                         <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
@@ -157,10 +181,12 @@
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
                 comercial: { hasCNPJ: false, cnpj: '', abertura: '', cpfTitular: '', celTitular: '', emailTitular: '' },
+                returnForm: { insurer: '', customInsurer: '', monthlyValue: '' },
                 values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
                 contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478' },
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
+                getSelectedInsurer() { return this.returnForm.insurer === 'Outra' ? this.returnForm.customInsurer.trim() : this.returnForm.insurer; },
                 checkParams() {
                     const urlParams = new URLSearchParams(window.location.search);
                     if (urlParams.has('retorno')) {
@@ -181,6 +207,7 @@
                 maskCelTitular(e) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'); this.comercial.celTitular = v.substring(0,15); },
                 maskCEP(e) { this.property.cep = e.target.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2').substring(0,9); },
                 maskCurrency(e, f) { this.values[f] = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); },
+                maskReturnCurrency(e) { this.returnForm.monthlyValue = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); },
                 
                 sendToMarcelo() {
                     if (!this.tenants[0].cpf || !this.tenants[0].email || !this.property.cep || !this.values.rent) {
@@ -209,7 +236,16 @@
                 },
 
                 confirmReturn(status) {
-                    let msg = (status === 'aprovado') ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi concluída!\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*` : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
+                    if (status === 'aprovado') {
+                        const insurer = this.getSelectedInsurer();
+                        if (!insurer || !this.returnForm.monthlyValue) {
+                            alert('⚠️ Informe a seguradora e o valor mensal do seguro.'); return;
+                        }
+                    }
+
+                    let msg = (status === 'aprovado')
+                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi concluída!\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
+                        : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
