@@ -47,19 +47,26 @@
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 mb-6 text-left">
                         <div>
                             <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Seguradora</label>
-                            <select x-model="returnForm.insurer" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
-                                <option value="">Selecione</option>
-                                <option value="Porto Seguro">Porto Seguro</option>
-                                <option value="Pottencial">Pottencial</option>
-                                <option value="Too Seguros">Too Seguros</option>
-                                <option value="Loovi">Loovi</option>
-                                <option value="Outra">Outra</option>
-                            </select>
-                        </div>
-
-                        <div x-show="returnForm.insurer === 'Outra'" x-transition>
-                            <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Qual seguradora?</label>
-                            <input type="text" x-model="returnForm.customInsurer" placeholder="Digite o nome da seguradora" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-4 text-sm mt-1 uppercase font-semibold">
+                            <div class="grid grid-cols-2 gap-3 mt-2">
+                                <button
+                                    type="button"
+                                    @click="returnForm.insurer = 'PORTO SEGURO'"
+                                    :class="returnForm.insurer === 'PORTO SEGURO' ? 'border-[#004691] ring-2 ring-[#004691]/15 bg-white' : 'border-slate-200 bg-white'"
+                                    class="rounded-xl border p-3 flex flex-col items-center justify-center gap-3 transition-all"
+                                >
+                                    <img src="assets/porto-seguro.svg" alt="Porto Seguro" class="h-10 w-auto object-contain">
+                                    <span class="text-[11px] font-black text-slate-700 uppercase text-center">Porto Seguro</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="returnForm.insurer = 'TOKIO MARINE'"
+                                    :class="returnForm.insurer === 'TOKIO MARINE' ? 'border-[#004691] ring-2 ring-[#004691]/15 bg-white' : 'border-slate-200 bg-white'"
+                                    class="rounded-xl border p-3 flex flex-col items-center justify-center gap-3 transition-all"
+                                >
+                                    <img src="assets/tokio-marine.svg" alt="Tokio Marine" class="h-10 w-auto object-contain">
+                                    <span class="text-[11px] font-black text-slate-700 uppercase text-center">Tokio Marine</span>
+                                </button>
+                            </div>
                         </div>
 
                         <div>
@@ -93,7 +100,8 @@
                         <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic font-bold">Atendente Ribera</label>
                         <select x-model="attendantName" :disabled="fixedAttendant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
                             <option value="Beth">Beth Camargo</option>
-                            <option value="Ribera">Ribera (Vendas)</option>
+                            <option value="Ribera">Ribera (Recepção)</option>
+                             <option value="Ribera">Ribera (Locação)</option>
                             <option value="Paulo">Paulo</option>
                             <option value="Otalivio">Otálivio</option>
                             <option value="Geral">Atendimento Geral</option>
@@ -181,12 +189,12 @@
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
                 comercial: { hasCNPJ: false, cnpj: '', abertura: '', cpfTitular: '', celTitular: '', emailTitular: '' },
-                returnForm: { insurer: '', customInsurer: '', monthlyValue: '' },
+                returnForm: { insurer: '', monthlyValue: '' },
                 values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
                 contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478' },
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
-                getSelectedInsurer() { return this.returnForm.insurer === 'Outra' ? this.returnForm.customInsurer.trim() : this.returnForm.insurer; },
+                getSelectedInsurer() { return this.returnForm.insurer; },
                 checkParams() {
                     const urlParams = new URLSearchParams(window.location.search);
                     if (urlParams.has('retorno')) {
