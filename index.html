@@ -101,7 +101,6 @@
                         <select x-model="attendantName" :disabled="fixedAttendant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
                             <option value="Beth">Beth Camargo</option>
                             <option value="Ribera">Ribera (Recepção)</option>
-                             <option value="Ribera">Ribera (Locação)</option>
                             <option value="Paulo">Paulo</option>
                             <option value="Otalivio">Otálivio</option>
                             <option value="Geral">Atendimento Geral</option>
@@ -195,6 +194,15 @@
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
                 getSelectedInsurer() { return this.returnForm.insurer; },
+                onlyDigits(value) { return String(value || '').replace(/\D/g, ''); },
+                hasText(value) { return String(value || '').trim().length > 0; },
+                hasRequiredMainFields() {
+                    const mainTenant = this.tenants[0] || {};
+                    return this.onlyDigits(mainTenant.cpf).length === 11 &&
+                        this.hasText(mainTenant.email) &&
+                        this.onlyDigits(this.property.cep).length === 8 &&
+                        this.onlyDigits(this.values.rent).length > 0;
+                },
                 checkParams() {
                     const urlParams = new URLSearchParams(window.location.search);
                     if (urlParams.has('retorno')) {
@@ -218,10 +226,10 @@
                 maskReturnCurrency(e) { this.returnForm.monthlyValue = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); },
                 
                 sendToMarcelo() {
-                    if (!this.tenants[0].cpf || !this.tenants[0].email || !this.property.cep || !this.values.rent) {
+                    if (!this.hasRequiredMainFields()) {
                         alert('⚠️ Informe CPF, E-mail, CEP e Aluguel do titular.'); return;
                     }
-                    if (this.isComercial() && this.comercial.hasCNPJ && (!this.comercial.cnpj || !this.comercial.cpfTitular)) {
+                    if (this.isComercial() && this.comercial.hasCNPJ && (this.onlyDigits(this.comercial.cnpj).length !== 14 || this.onlyDigits(this.comercial.cpfTitular).length !== 11)) {
                         alert('⚠️ Para análise com CNPJ, informe o número do CNPJ e o CPF do Titular.'); return;
                     }
 
