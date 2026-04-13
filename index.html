@@ -79,6 +79,9 @@
                         <button @click="confirmReturn('aprovado')" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
                             <i class="fas fa-check-circle text-xl"></i> Aprovado / Solicitar Biometria
                         </button>
+                        <button @click="confirmReturn('biometria')" class="w-full porto-blue text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
+                            <i class="fas fa-file-signature text-xl"></i> Biometria Aprovada / Seguir para Contrato
+                        </button>
                         <button @click="confirmReturn('recusado')" class="w-full bg-red-600 text-white py-5 rounded-2xl font-black uppercase italic shadow-lg flex items-center justify-center gap-3">
                             <i class="fas fa-times-circle text-xl"></i> Ficha Recusada
                         </button>
@@ -100,7 +103,7 @@
                         <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic font-bold">Atendente Ribera</label>
                         <select x-model="attendantName" :disabled="fixedAttendant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
                             <option value="Beth">Beth Camargo</option>
-                            <option value="Ribera">Ribera (Recepção)</option>
+                            <option value="Ribera">Ribera (Vendas)</option>
                             <option value="Paulo">Paulo</option>
                             <option value="Otalivio">Otálivio</option>
                             <option value="Geral">Atendimento Geral</option>
@@ -252,15 +255,17 @@
                 },
 
                 confirmReturn(status) {
-                    if (status === 'aprovado') {
+                    if (status === 'aprovado' || status === 'biometria') {
                         const insurer = this.getSelectedInsurer();
                         if (!insurer || !this.returnForm.monthlyValue) {
                             alert('⚠️ Informe a seguradora e o valor mensal do seguro.'); return;
                         }
                     }
 
-                    let msg = (status === 'aprovado')
+                    let msg = status === 'aprovado'
                         ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Solicitar a biometria facial para continuidade do processo.`
+                        : status === 'biometria'
+                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
                         : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                 }
