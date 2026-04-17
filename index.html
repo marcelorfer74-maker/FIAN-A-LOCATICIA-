@@ -54,7 +54,7 @@
                                     :class="returnForm.insurer === 'PORTO SEGURO' ? 'border-[#004691] ring-2 ring-[#004691]/15 bg-white' : 'border-slate-200 bg-white'"
                                     class="rounded-xl border p-3 flex flex-col items-center justify-center gap-3 transition-all"
                                 >
-                                    <img src="ativos/porto-seguro.svg" alt="Porto Seguro" class="h-10 w-auto object-contain">
+                                    <img src="assets/porto-seguro.svg" alt="Porto Seguro" class="h-10 w-auto object-contain">
                                     <span class="text-[11px] font-black text-slate-700 uppercase text-center">Porto Seguro</span>
                                 </button>
                                 <button
@@ -63,7 +63,7 @@
                                     :class="returnForm.insurer === 'TOKIO MARINE' ? 'border-[#004691] ring-2 ring-[#004691]/15 bg-white' : 'border-slate-200 bg-white'"
                                     class="rounded-xl border p-3 flex flex-col items-center justify-center gap-3 transition-all"
                                 >
-                                    <img src="ativos/tokio-marine.svg" alt="Tokio Marine" class="h-10 w-auto object-contain">
+                                    <img src="assets/tokio-marine.svg" alt="Tokio Marine" class="h-10 w-auto object-contain">
                                     <span class="text-[11px] font-black text-slate-700 uppercase text-center">Tokio Marine</span>
                                 </button>
                             </div>
@@ -141,22 +141,19 @@
                         <div x-show="isComercial()" x-transition class="bg-blue-50 p-4 rounded-2xl border border-blue-100 space-y-3">
                             <p class="text-[10px] font-black porto-text uppercase tracking-widest text-center">Empresa Responsável</p>
                             <div>
-                                <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Possui CNPJ?</label>
+                                <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Tem empresa aberta?</label>
                                 <div class="grid grid-cols-2 gap-2 mt-1">
-                                    <button @click="comercial.hasCNPJ = true" :class="comercial.hasCNPJ ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Sim</button>
-                                    <button @click="comercial.hasCNPJ = false" :class="!comercial.hasCNPJ ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Não</button>
+                                    <button @click="comercial.hasCompany = true" :class="comercial.hasCompany ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Sim</button>
+                                    <button @click="comercial.hasCompany = false" :class="!comercial.hasCompany ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Não</button>
                                 </div>
                             </div>
-                            <div x-show="comercial.hasCNPJ" class="grid grid-cols-2 gap-2" x-transition>
+                            <div x-show="comercial.hasCompany" class="grid grid-cols-2 gap-2" x-transition>
                                 <input type="tel" x-model="comercial.cnpj" @input="maskCNPJ($event)" placeholder="CNPJ *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="18">
-                                <input type="text" x-model="comercial.abertura" placeholder="Tempo Abertura *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm">
+                                <input type="date" x-model="comercial.openingDate" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm text-slate-700">
                             </div>
-                            <div x-show="comercial.hasCNPJ" class="space-y-2" x-transition>
-                                <input type="tel" x-model="comercial.cpfTitular" @input="maskCPFTitular($event)" placeholder="CPF Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="14">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="tel" x-model="comercial.celTitular" @input="maskCelTitular($event)" placeholder="Celular Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="15">
-                                    <input type="email" x-model="comercial.emailTitular" placeholder="E-mail Titular *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm uppercase">
-                                </div>
+                            <div x-show="comercial.hasCompany" class="space-y-2" x-transition>
+                                <input type="tel" x-model="comercial.cpfTitular" @input="maskCPFTitular($event)" placeholder="CPF do Titular (se for diferente do locatário)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="14">
+                                <input type="text" x-model="comercial.activity" placeholder="Ramo de Atividade *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm uppercase">
                             </div>
                         </div>
 
@@ -190,7 +187,7 @@
                 userType: 'Imobiliária', attendantName: 'Beth', fixedAttendant: false,
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
-                comercial: { hasCNPJ: false, cnpj: '', abertura: '', cpfTitular: '', celTitular: '', emailTitular: '' },
+                comercial: { hasCompany: false, cnpj: '', openingDate: '', cpfTitular: '', activity: '' },
                 returnForm: { insurer: '', monthlyValue: '' },
                 values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
                 contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478' },
@@ -223,7 +220,6 @@
                 maskPhone(e, i) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'); this.tenants[i].phone = v.substring(0,15); },
                 maskCNPJ(e) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); this.comercial.cnpj = v.substring(0,18); },
                 maskCPFTitular(e) { let v = e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.comercial.cpfTitular = v.substring(0,14); },
-                maskCelTitular(e) { let v = e.target.value.replace(/\D/g, '').replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d)(\d{4})$/, '$1-$2'); this.comercial.celTitular = v.substring(0,15); },
                 maskCEP(e) { this.property.cep = e.target.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2').substring(0,9); },
                 maskCurrency(e, f) { this.values[f] = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); },
                 maskReturnCurrency(e) { this.returnForm.monthlyValue = (e.target.value.replace(/\D/g, '')/100).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); },
@@ -232,8 +228,8 @@
                     if (!this.hasRequiredMainFields()) {
                         alert('⚠️ Informe CPF, E-mail, CEP e Aluguel do titular.'); return;
                     }
-                    if (this.isComercial() && this.comercial.hasCNPJ && (this.onlyDigits(this.comercial.cnpj).length !== 14 || this.onlyDigits(this.comercial.cpfTitular).length !== 11)) {
-                        alert('⚠️ Para análise com CNPJ, informe o número do CNPJ e o CPF do Titular.'); return;
+                    if (this.isComercial() && this.comercial.hasCompany && (this.onlyDigits(this.comercial.cnpj).length !== 14 || !this.hasText(this.comercial.openingDate) || !this.hasText(this.comercial.activity))) {
+                        alert('⚠️ Para locação comercial com empresa aberta, informe CNPJ, data de abertura e ramo de atividade.'); return;
                     }
 
                     const firstTenant = this.tenants[0].name || 'Cliente';
@@ -245,8 +241,8 @@
                     
                     let comTxt = '';
                     if(this.isComercial()){
-                        comTxt = `🏢 *COMERCIAL:*\nCNPJ: ${this.comercial.hasCNPJ ? this.comercial.cnpj : 'NÃO POSSUI'}\nTempo: ${this.comercial.abertura || '-'}\n` +
-                                 (this.comercial.hasCNPJ ? `Titular CPF: ${this.comercial.cpfTitular}\nTitular Cel: ${this.comercial.celTitular}\nTitular Email: ${this.comercial.emailTitular}\n\n` : '');
+                        comTxt = `🏢 *COMERCIAL:*\nEmpresa Aberta: ${this.comercial.hasCompany ? 'SIM' : 'NÃO'}\n` +
+                                 (this.comercial.hasCompany ? `CNPJ: ${this.comercial.cnpj}\nCPF Titular: ${this.comercial.cpfTitular || 'MESMO DO LOCATÁRIO'}\nData Abertura: ${this.comercial.openingDate}\nRamo de Atividade: ${this.comercial.activity}\n\n` : '\n');
                     }
 
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
