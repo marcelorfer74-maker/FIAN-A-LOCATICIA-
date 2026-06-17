@@ -15,6 +15,7 @@
         input:focus, select:focus { outline: none; border-color: #004691; border-width: 2px; }
         [x-cloak] { display: none !important; }
         .porto-blue { background-color: #004691; }
+        .porto-text { color: #004691; }
     </style>
 </head>
 <body class="min-h-screen pb-10" x-data="app()" x-init="checkParams()" x-cloak>
@@ -54,7 +55,9 @@
                                     :class="returnForm.insurer === 'PORTO SEGURO' ? 'border-[#004691] ring-2 ring-[#004691]/15 bg-white' : 'border-slate-200 bg-white'"
                                     class="rounded-xl border p-3 flex flex-col items-center justify-center gap-3 transition-all"
                                 >
-                                    <img src="assets/porto-seguro.svg" alt="Porto Seguro" class="h-10 w-auto object-contain">
+                                    <div class="h-12 w-full flex items-center justify-center rounded-lg bg-white px-2">
+                                        <img src="./assets/porto-seguro.svg" alt="Porto Seguro" class="h-10 max-w-full object-contain" loading="eager">
+                                    </div>
                                     <span class="text-[11px] font-black text-slate-700 uppercase text-center">Porto Seguro</span>
                                 </button>
                                 <button
@@ -63,7 +66,9 @@
                                     :class="returnForm.insurer === 'TOKIO MARINE' ? 'border-[#004691] ring-2 ring-[#004691]/15 bg-white' : 'border-slate-200 bg-white'"
                                     class="rounded-xl border p-3 flex flex-col items-center justify-center gap-3 transition-all"
                                 >
-                                    <img src="assets/tokio-marine.svg" alt="Tokio Marine" class="h-10 w-auto object-contain">
+                                    <div class="h-12 w-full flex items-center justify-center rounded-lg bg-white px-2">
+                                        <img src="./assets/tokio-marine.svg" alt="Tokio Marine" class="h-10 max-w-full object-contain" loading="eager">
+                                    </div>
                                     <span class="text-[11px] font-black text-slate-700 uppercase text-center">Tokio Marine</span>
                                 </button>
                             </div>
@@ -106,8 +111,8 @@
                             <option value="Beth">Beth Camargo</option>
                             <option value="Ribera">Ribera (Vendas)</option>
                             <option value="Paulo">Paulo</option>
-                            <option value="Otalivio">Otálivio</option
-                           <option value="Roel">Parceria Fiança</option>
+                            <option value="Otalivio">Otálivio</option>
+                            <option value="Roel">Parceria Fiança</option>
                         </select>
                     </div>
                 </section>
@@ -144,17 +149,29 @@
                             <div>
                                 <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Tem empresa aberta?</label>
                                 <div class="grid grid-cols-2 gap-2 mt-1">
-                                    <button @click="comercial.hasCompany = true" :class="comercial.hasCompany ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Sim</button>
-                                    <button @click="comercial.hasCompany = false" :class="!comercial.hasCompany ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Não</button>
+                                    <button @click="setHasCompany(true)" :class="comercial.hasCompany === true ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Sim</button>
+                                    <button @click="setHasCompany(false)" :class="comercial.hasCompany === false ? 'porto-blue text-white' : 'bg-white text-slate-400'" class="py-2 rounded-lg text-[10px] font-bold uppercase shadow-sm">Não</button>
                                 </div>
                             </div>
-                            <div x-show="comercial.hasCompany" class="grid grid-cols-2 gap-2" x-transition>
-                                <input type="tel" x-model="comercial.cnpj" @input="maskCNPJ($event)" placeholder="CNPJ *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="18">
-                                <input type="date" x-model="comercial.openingDate" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm text-slate-700">
-                            </div>
-                            <div x-show="comercial.hasCompany" class="space-y-2" x-transition>
-                                <input type="tel" x-model="comercial.cpfTitular" @input="maskCPFTitular($event)" placeholder="CPF do Titular (se for diferente do locatário)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm" maxlength="14">
-                                <input type="text" x-model="comercial.activity" placeholder="Ramo de Atividade *" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm uppercase">
+                            <div x-show="comercial.hasCompany === true" class="space-y-3" x-transition>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">CNPJ</label>
+                                        <input type="tel" x-model="comercial.cnpj" @input="maskCNPJ($event)" placeholder="00.000.000/0000-00" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm mt-1" maxlength="18">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Data de abertura</label>
+                                        <input type="date" x-model="comercial.openingDate" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm text-slate-700 mt-1">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">CPF do titular</label>
+                                    <input type="tel" x-model="comercial.cpfTitular" @input="maskCPFTitular($event)" placeholder="Se for diferente do locatário" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm mt-1" maxlength="14">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase ml-1">Ramo de atividade</label>
+                                    <input type="text" x-model="comercial.activity" placeholder="Ex.: escritório de contabilidade" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm uppercase mt-1">
+                                </div>
                             </div>
                         </div>
 
@@ -188,15 +205,29 @@
                 userType: 'Imobiliária', attendantName: 'Beth', fixedAttendant: false,
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
-                comercial: { hasCompany: false, cnpj: '', openingDate: '', cpfTitular: '', activity: '' },
+                comercial: { hasCompany: null, cnpj: '', openingDate: '', cpfTitular: '', activity: '' },
                 returnForm: { insurer: '', monthlyValue: '' },
                 values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
-                contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478' },
+                contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478', 'Roel': '5515981384281' },
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
                 getSelectedInsurer() { return this.returnForm.insurer; },
                 onlyDigits(value) { return String(value || '').replace(/\D/g, ''); },
                 hasText(value) { return String(value || '').trim().length > 0; },
+                formatDate(value) {
+                    if (!value) return '';
+                    const [year, month, day] = value.split('-');
+                    return year && month && day ? `${day}/${month}/${year}` : value;
+                },
+                setHasCompany(value) {
+                    this.comercial.hasCompany = value;
+                    if (!value) {
+                        this.comercial.cnpj = '';
+                        this.comercial.openingDate = '';
+                        this.comercial.cpfTitular = '';
+                        this.comercial.activity = '';
+                    }
+                },
                 hasRequiredMainFields() {
                     const mainTenant = this.tenants[0] || {};
                     return this.onlyDigits(mainTenant.cpf).length === 11 &&
@@ -229,13 +260,16 @@
                     if (!this.hasRequiredMainFields()) {
                         alert('⚠️ Informe CPF, E-mail, CEP e Aluguel do titular.'); return;
                     }
+                    if (this.isComercial() && this.comercial.hasCompany === null) {
+                        alert('⚠️ Informe se o locatário comercial tem empresa aberta.'); return;
+                    }
                     if (this.isComercial() && this.comercial.hasCompany && (this.onlyDigits(this.comercial.cnpj).length !== 14 || !this.hasText(this.comercial.openingDate) || !this.hasText(this.comercial.activity))) {
                         alert('⚠️ Para locação comercial com empresa aberta, informe CNPJ, data de abertura e ramo de atividade.'); return;
                     }
 
                     const firstTenant = this.tenants[0].name || 'Cliente';
                     const baseUrl = window.location.href.split('?')[0];
-                    const returnLink = `${baseUrl}?retorno=1&atendente=${this.attendantName}&cliente=${encodeURIComponent(firstTenant)}`;
+                    const returnLink = `${baseUrl}?retorno=1&atendente=${encodeURIComponent(this.attendantName)}&cliente=${encodeURIComponent(firstTenant)}`;
                     
                     let tTxt = '';
                     this.tenants.forEach((t, i) => { if(t.cpf) tTxt += `👤 *LOC ${i+1}:* ${t.name.toUpperCase()}\nCPF: ${t.cpf}\nWhats: ${t.phone}\nE-mail: ${t.email.toLowerCase()}\n\n`; });
@@ -243,7 +277,7 @@
                     let comTxt = '';
                     if(this.isComercial()){
                         comTxt = `🏢 *COMERCIAL:*\nEmpresa Aberta: ${this.comercial.hasCompany ? 'SIM' : 'NÃO'}\n` +
-                                 (this.comercial.hasCompany ? `CNPJ: ${this.comercial.cnpj}\nCPF Titular: ${this.comercial.cpfTitular || 'MESMO DO LOCATÁRIO'}\nData Abertura: ${this.comercial.openingDate}\nRamo de Atividade: ${this.comercial.activity}\n\n` : '\n');
+                                 (this.comercial.hasCompany ? `CNPJ: ${this.comercial.cnpj}\nCPF Titular: ${this.comercial.cpfTitular || 'MESMO DO LOCATÁRIO'}\nData Abertura: ${this.formatDate(this.comercial.openingDate)}\nRamo de Atividade: ${this.comercial.activity}\n\n` : '\n');
                     }
 
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
@@ -264,9 +298,17 @@
                         : status === 'biometria'
                         ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
                         : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
-                    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+                    const targetPhone = this.contacts[this.attendantName];
+                    const destination = targetPhone ? `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+                    window.open(destination, '_blank');
                 }
             }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
         }
     </script>
 </body>
