@@ -293,7 +293,9 @@
 
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
                     const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
-                    window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
+                    
+                    // Alinhado para forçar o aplicativo nativo de trabalho
+                    window.location.href = `whatsapp://send?phone=5515996367478&text=${encodeURIComponent(msg)}`;
                 },
 
                 confirmReturn(status) {
@@ -316,11 +318,13 @@
                     const targetDestination = this.contacts[this.attendantName];
 
                     if (targetDestination && targetDestination.startsWith('http')) {
+                        // Grupo do Whatsapp abre via navegador
                         window.open(`${targetDestination}`, '_blank');
                     } else if (targetDestination) {
-                        window.open(`https://wa.me/${targetDestination}?text=${encodeURIComponent(msg)}`, '_blank');
+                        // Contatos normais acionam o protocolo do WhatsApp Business/Nativo instalado no celular
+                        window.location.href = `whatsapp://send?phone=${targetDestination}&text=${encodeURIComponent(msg)}`;
                     } else {
-                        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+                        window.location.href = `whatsapp://send?text=${encodeURIComponent(msg)}`;
                     }
                 }
             }
