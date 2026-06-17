@@ -26,7 +26,7 @@
             <div class="relative z-10" x-show="!isReturnMode">
                 <h1 class="text-4xl font-black tracking-tighter leading-none uppercase">RIBERA</h1>
                 <p class="text-[10px] font-bold uppercase tracking-[0.4em] mt-1 text-white/90">Corretora</p>
-                <div class="h-[1px] w-12 bg-amber-400 mx-auto My-3"></div>
+                <div class="h-[1px] w-12 bg-amber-400 mx-auto my-3"></div>
                 <p class="text-lg font-medium lowercase tracking-tight text-amber-300 italic">fiança locatícia</p>
             </div>
             
@@ -219,7 +219,6 @@
                 },
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
-                getSelectedInsurer() { return this.returnForm.insurer; },
                 onlyDigits(value) { return String(value || '').replace(/\D/g, ''); },
                 hasText(value) { return String(value || '').trim().length > 0; },
                 formatDate(value) {
