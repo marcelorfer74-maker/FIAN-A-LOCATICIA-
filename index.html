@@ -274,7 +274,6 @@
                         alert('⚠️ Para locação comercial com empresa aberta, informe CNPJ, data de abertura e ramo de atividade.'); return;
                     }
 
-                    // Nova Janela de confirmação adicionada aqui antes do envio inicial
                     if (!confirm(`Confirmar envio dos dados da ficha vinculada ao atendente: ${this.attendantName}?`)) {
                         return;
                     }
@@ -294,7 +293,7 @@
 
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
                     const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
-                    window.open snapshot(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
+                    window.open(`https://wa.me/5515996367478?text=${encodeURIComponent(msg)}`, '_blank');
                 },
 
                 confirmReturn(status) {
