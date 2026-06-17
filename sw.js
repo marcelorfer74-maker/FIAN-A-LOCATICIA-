@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fianca-pro-v5';
+const CACHE_NAME = 'fianca-pro-v6';
 const ASSETS = [
   'index.html',
   'manifest.json',
@@ -7,15 +7,6 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
