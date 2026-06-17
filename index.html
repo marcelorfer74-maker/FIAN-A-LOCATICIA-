@@ -26,7 +26,7 @@
             <div class="relative z-10" x-show="!isReturnMode">
                 <h1 class="text-4xl font-black tracking-tighter leading-none uppercase">RIBERA</h1>
                 <p class="text-[10px] font-bold uppercase tracking-[0.4em] mt-1 text-white/90">Corretora</p>
-                <div class="h-[1px] w-12 bg-amber-400 mx-auto my-3"></div>
+                <div class="h-[1px] w-12 bg-amber-400 mx-auto My-3"></div>
                 <p class="text-lg font-medium lowercase tracking-tight text-amber-300 italic">fiança locatícia</p>
             </div>
             
@@ -295,8 +295,7 @@
 
                 confirmReturn(status) {
                     if (status === 'aprovado' || status === 'biometria') {
-                        const insurer = this.getSelectedInsurer();
-                        if (!insurer || !this.returnForm.monthlyValue) {
+                        if (!this.returnForm.insurer || !this.returnForm.monthlyValue) {
                             alert('⚠️ Informe a seguradora e o valor mensal do seguro.'); return;
                         }
                     }
@@ -306,9 +305,9 @@
                     }
 
                     let msg = status === 'aprovado'
-                        ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Solicitar a biometria facial para continuidade do processo.`
+                        ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Solicitar a biometria facial para continuidade do processo.`
                         : status === 'biometria'
-                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
+                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
                         : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
 
                     const targetDestination = this.contacts[this.attendantName];
