@@ -294,8 +294,8 @@
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
                     const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
                     
-                    // Alinhado para forçar o aplicativo nativo de trabalho
-                    window.location.href = `whatsapp://send?phone=5515996367478&text=${encodeURIComponent(msg)}`;
+                    // Link de API oficial universal compatível com WhatsApp Business
+                    window.open(`https://api.whatsapp.com/send?phone=5515996367478&text=${encodeURIComponent(msg)}`, '_blank');
                 },
 
                 confirmReturn(status) {
@@ -318,13 +318,11 @@
                     const targetDestination = this.contacts[this.attendantName];
 
                     if (targetDestination && targetDestination.startsWith('http')) {
-                        // Grupo do Whatsapp abre via navegador
                         window.open(`${targetDestination}`, '_blank');
                     } else if (targetDestination) {
-                        // Contatos normais acionam o protocolo do WhatsApp Business/Nativo instalado no celular
-                        window.location.href = `whatsapp://send?phone=${targetDestination}&text=${encodeURIComponent(msg)}`;
+                        window.open(`https://api.whatsapp.com/send?phone=${targetDestination}&text=${encodeURIComponent(msg)}`, '_blank');
                     } else {
-                        window.location.href = `whatsapp://send?text=${encodeURIComponent(msg)}`;
+                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
                     }
                 }
             }
