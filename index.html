@@ -237,10 +237,15 @@
                 },
                 hasRequiredMainFields() {
                     const mainTenant = this.tenants[0] || {};
-                    return this.onlyDigits(mainTenant.cpf).length === 11 &&
-                        this.hasText(mainTenant.email) &&
-                        this.onlyDigits(this.property.cep).length === 8 &&
-                        this.onlyDigits(this.values.rent).length > 0;
+                    // Ajustado para aceitar validações mais elásticas sem quebrar por caracteres especiais da máscara
+                    const cleanCpf = this.onlyDigits(mainTenant.cpf);
+                    const cleanCep = this.onlyDigits(this.property.cep);
+                    const cleanRent = this.onlyDigits(this.values.rent);
+
+                    return cleanCpf.length >= 11 && 
+                           this.hasText(mainTenant.email) && 
+                           cleanCep.length >= 8 && 
+                           cleanRent.length > 0;
                 },
                 checkParams() {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -265,7 +270,7 @@
                 
                 sendToMarcelo() {
                     if (!this.hasRequiredMainFields()) {
-                        alert('⚠️ Informe CPF, E-mail, CEP e Aluguel do titular.'); return;
+                        alert('⚠️ Verifique os campos obrigatórios do Locatário 1 (CPF completo, E-mail válido), CEP e o Aluguel Bruto.'); return;
                     }
                     if (this.isComercial() && this.comercial.hasCompany === null) {
                         alert('⚠️ Informe se o locatário comercial tem empresa aberta.'); return;
@@ -294,7 +299,6 @@
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
                     const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
                     
-                    // Link de API oficial universal compatível com WhatsApp Business
                     window.open(`https://api.whatsapp.com/send?phone=5515996367478&text=${encodeURIComponent(msg)}`, '_blank');
                 },
 
