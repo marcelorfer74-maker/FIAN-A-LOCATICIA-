@@ -215,7 +215,7 @@
                     'Otalivio': '5515996007933', 
                     'Atendimento': '5515996367478', 
                     'Roel': '5515981384281',
-                    'Geral': 'https://chat.whatsapp.com/Ey530TxnHtrBMIiVbn30TM' 
+                    'Geral': '' 
                 },
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
@@ -237,7 +237,6 @@
                 },
                 hasRequiredMainFields() {
                     const mainTenant = this.tenants[0] || {};
-                    // Ajustado para aceitar validações mais elásticas sem quebrar por caracteres especiais da máscara
                     const cleanCpf = this.onlyDigits(mainTenant.cpf);
                     const cleanCep = this.onlyDigits(this.property.cep);
                     const cleanRent = this.onlyDigits(this.values.rent);
@@ -321,9 +320,7 @@
 
                     const targetDestination = this.contacts[this.attendantName];
 
-                    if (targetDestination && targetDestination.startsWith('http')) {
-                        window.open(`${targetDestination}`, '_blank');
-                    } else if (targetDestination) {
+                    if (targetDestination && targetDestination.trim().length > 0) {
                         window.open(`https://api.whatsapp.com/send?phone=${targetDestination}&text=${encodeURIComponent(msg)}`, '_blank');
                     } else {
                         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
