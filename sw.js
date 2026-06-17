@@ -1,12 +1,21 @@
-const CACHE_NAME = 'fianca-pro-v3';
+const CACHE_NAME = 'fianca-pro-v5';
 const ASSETS = [
   'index.html',
   'manifest.json',
-  'ativos/porto-seguro.svg',
-  'ativos/tokio-marine.svg'
+  'assets/porto-seguro.svg',
+  'assets/tokio-marine.svg'
 ];
 
 self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
