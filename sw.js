@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fianca-pro-v11';
+const CACHE_NAME = 'fianca-pro-v12';
 const ASSETS = [
   'index.html',
   'manifest.json',
