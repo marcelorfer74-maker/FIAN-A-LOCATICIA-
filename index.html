@@ -208,7 +208,15 @@
                 comercial: { hasCompany: null, cnpj: '', openingDate: '', cpfTitular: '', activity: '' },
                 returnForm: { insurer: '', monthlyValue: '' },
                 values: { rent: '', iptu: '', condo: '' }, isReturnMode: false, clientName: '',
-                contacts: { 'Beth': '5515988407007', 'Ribera': '5515997489093', 'Paulo': '5515992791441', 'Otalivio': '5515996007933', 'Geral': '551532321545', 'Atendimento': '5515996367478', 'Roel': '5515981384281' },
+                contacts: { 
+                    'Beth': '5515988407007', 
+                    'Ribera': '5515997489093', 
+                    'Paulo': '5515992791441', 
+                    'Otalivio': '5515996007933', 
+                    'Atendimento': '5515996367478', 
+                    'Roel': '5515981384281',
+                    'Geral': 'https://chat.whatsapp.com/Ey530TxnHtrBMIiVbn30TM' 
+                },
                 
                 isComercial() { return ['Sala', 'Salão', 'Galpão'].includes(this.property.type); },
                 getSelectedInsurer() { return this.returnForm.insurer; },
@@ -293,14 +301,25 @@
                         }
                     }
 
+                    if (!confirm(`Confirma o envio do retorno para o atendente: ${this.attendantName}?`)) {
+                        return;
+                    }
+
                     let msg = status === 'aprovado'
                         ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Solicitar a biometria facial para continuidade do processo.`
                         : status === 'biometria'
                         ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.getSelectedInsurer()}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
                         : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
-                    const targetPhone = this.contacts[this.attendantName];
-                    const destination = targetPhone ? `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
-                    window.open(destination, '_blank');
+
+                    const targetDestination = this.contacts[this.attendantName];
+
+                    if (targetDestination && targetDestination.startsWith('http')) {
+                        window.open(`${targetDestination}`, '_blank');
+                    } else if (targetDestination) {
+                        window.open(`https://wa.me/${targetDestination}?text=${encodeURIComponent(msg)}`, '_blank');
+                    } else {
+                        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+                    }
                 }
             }
         }
