@@ -100,10 +100,11 @@
                 <section class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
                     <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 font-bold">Origem</h2>
                     <div class="grid grid-cols-2 gap-2 mb-4">
-                        <button @click="userType = 'Cliente'; if(!fixedAttendant) attendantName = 'Atendimento'" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
-                        <button @click="userType = 'Imobiliária'" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
+                        <button @click="userType = 'Cliente';" :class="userType === 'Cliente' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Cliente</button>
+                        <button @click="userType = 'Imobiliária';" :class="userType === 'Imobiliária' ? 'porto-blue text-white shadow-md' : 'bg-slate-100 text-slate-400'" class="py-3 rounded-xl text-[11px] font-black uppercase transition-all">Imobiliária</button>
                     </div>
                     
+                    <!-- Cenário 1: Se for Imobiliária, exibe a lista tradicional de Atendentes -->
                     <div x-show="userType === 'Imobiliária' || fixedAttendant" x-transition>
                         <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic font-bold">Atendente Ribera</label>
                         <select x-model="attendantName" :disabled="fixedAttendant" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-4 text-sm font-bold text-slate-700 mt-1">
@@ -113,6 +114,16 @@
                             <option value="Paulo">Paulo</option>
                             <option value="Otalivio">Otálivio</option>
                             <option value="Roel">Parceria Fiança</option>
+                        </select>
+                    </div>
+
+                    <!-- Cenário 2: Se for Cliente, exibe a nova seleção estratégica de Imobiliária de Origem -->
+                    <div x-show="userType === 'Cliente' && !fixedAttendant" x-transition>
+                        <label class="text-[9px] font-bold text-slate-400 uppercase ml-1 italic font-bold">Qual imobiliária está te atendendo?</label>
+                        <select x-model="partnerName" class="w-full bg-amber-50 border border-amber-200 rounded-xl px-3 py-4 text-sm font-bold porto-text mt-1">
+                            <option value="RIBERA">RIBERA IMÓVEIS</option>
+                            <option value="ROEL">ROEL IMÓVEIS</option>
+                            <option value="OUTROS">OUTROS</option>
                         </select>
                     </div>
                 </section>
@@ -202,7 +213,10 @@
     <script>
         function app() {
             return {
-                userType: 'Imobiliária', attendantName: 'Beth', fixedAttendant: false,
+                userType: 'Imobiliária', 
+                attendantName: 'Beth', 
+                partnerName: 'RIBERA', // Opção padrão para preenchimento de clientes (RIBERA, ROEL, OUTROS)
+                fixedAttendant: false,
                 tenants: [{ name: '', cpf: '', phone: '', email: '' }],
                 property: { cep: '', type: 'Casa', number: '', complement: '', internalCode: '', flexCode: '' },
                 comercial: { hasCompany: null, cnpj: '', openingDate: '', cpfTitular: '', activity: '' },
@@ -283,14 +297,12 @@
                     }
 
                     const firstTenantName = this.tenants[0].name || 'Cliente';
-                    const firstTenantPhone = this.onlyDigits(this.tenants[0].phone);
                     
-                    // Identifica se a origem é o cliente e injeta a inteligência de número no parâmetro
+                    // Lógica Dinâmica de Atribuição do link de retorno
                     let finalAttendantParam = this.attendantName;
-                    if (this.userType === 'Cliente' && firstTenantPhone.length >= 10) {
-                        // Formato internacional brasileiro 55 + DDD + Número
-                        const prefix = firstTenantPhone.startsWith('55') ? '' : '55';
-                        finalAttendantParam = `CLIENTE_${prefix}${firstTenantPhone}`;
+                    if (this.userType === 'Cliente') {
+                        // Atribui as flags estratégicas com base na resposta do cliente
+                        finalAttendantParam = `PARTNER_${this.partnerName}`;
                     }
 
                     const baseUrl = window.location.href.split('?')[0];
@@ -306,7 +318,7 @@
                     }
 
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
-                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.userType === 'Cliente' ? 'Preenchido pelo Cliente' : this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
+                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nIMOBILIÁRIA ATENDIMENTO: ${this.userType === 'Cliente' ? this.partnerName + ' IMÓVEIS' : this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
                     
                     window.open(`https://api.whatsapp.com/send?phone=5515996367478&text=${encodeURIComponent(msg)}`, '_blank');
                 },
@@ -318,35 +330,47 @@
                         }
                     }
 
-                    // Trata a exibição do nome do confirm amigavelmente caso seja o celular do cliente
-                    const displayTarget = this.attendantName.startsWith('CLIENTE_') ? 'Direto ao Cliente (Locatário 1)' : this.attendantName;
+                    // Formata a exibição da janela de confirmação de acordo com as regras de negócio desejadas
+                    let displayTarget = this.attendantName;
+                    if (this.attendantName === 'PARTNER_RIBERA') displayTarget = 'Grupo Geral (Ribera Imóveis)';
+                    if (this.attendantName === 'PARTNER_ROEL') displayTarget = 'Contato Direto do Roel';
+                    if (this.attendantName === 'PARTNER_OUTROS') displayTarget = 'Lista Geral (Operador escolhe)';
 
                     if (!confirm(`Confirma o envio do retorno para: ${displayTarget}?`)) {
                         return;
                     }
 
                     let msg = status === 'aprovado'
-                        ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá,\nA sua ficha de fiança locatícia foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Realizar a biometria facial para emissão do contrato.`
+                        ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá,\nA ficha do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Solicitar a biometria facial para continuidade do processo.`
                         : status === 'biometria'
-                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá,\nA sua biometria facial foi validada e aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *PROCESSO LIBERADO PARA EMISSÃO DE CONTRATO DE LOCAÇÃO.*`
-                        : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá,\nIdentificamos uma inconsistência na análise da sua ficha e ela não pôde ser aprovada neste momento.\n\n⚠️ *DÚVIDAS:* Por favor, entre em contato direto conosco para entender os detalhes.`;
+                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO DE LOCAÇÃO.*`
+                        : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá,\nA ficha do cliente *${this.clientName}* não pôde ser aprovada nesta análise.\n\n⚠️ *AÇÃO:* Favor entrar em contato direto conosco para detalhes técnicos.`;
 
                     let targetDestination = '';
 
-                    // Inteligência Híbrida de Roteamento de Retorno
-                    if (this.attendantName.startsWith('CLIENTE_')) {
-                        // Extrai o WhatsApp limpo do locatário que foi guardado no parâmetro
-                        targetDestination = this.attendantName.replace('CLIENTE_', '');
+                    // Motor Inteligente de Roteamento Comercial
+                    if (this.attendantName.startsWith('PARTNER_')) {
+                        const partnerType = this.attendantName.replace('PARTNER_', '');
+                        
+                        if (partnerType === 'RIBERA') {
+                            // Envia para o Grupo Geral (deixa o campo em branco conforme regra de lista)
+                            targetDestination = '';
+                        } else if (partnerType === 'ROEL') {
+                            // Puxa o telefone direto do Roel cadastrado no banco interno
+                            targetDestination = this.contacts['Roel'];
+                        } else if (partnerType === 'OUTROS') {
+                            // Deixa em branco para abrir a lista livre no Business Web
+                            targetDestination = '';
+                        }
                     } else {
-                        // Busca da lista de colaboradores internos da corretora
+                        // Rota tradicional interna de atendentes (Beth, Paulo, etc)
                         targetDestination = this.contacts[this.attendantName];
                     }
 
                     if (targetDestination && targetDestination.trim().length > 0) {
-                        // Abre direto na conversa privada do WhatsApp Business (seja colaborador ou cliente)
                         window.open(`https://api.whatsapp.com/send?phone=${targetDestination}&text=${encodeURIComponent(msg)}`, '_blank');
                     } else {
-                        // Abre a lista em branco do WhatsApp Web/App para o operador escolher livremente
+                        // Abre nativamente a lista de conversas recentes do WhatsApp Business para escolher o grupo ou contato livre
                         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
                     }
                 }
