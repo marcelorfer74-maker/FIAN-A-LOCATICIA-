@@ -278,13 +278,23 @@
                         alert('⚠️ Para locação comercial com empresa aberta, informe CNPJ, data de abertura e ramo de atividade.'); return;
                     }
 
-                    if (!confirm(`Confirmar envio dos dados da ficha vinculada ao atendente: ${this.attendantName}?`)) {
+                    if (!confirm(`Confirmar envio dos dados da ficha?`)) {
                         return;
                     }
 
-                    const firstTenant = this.tenants[0].name || 'Cliente';
+                    const firstTenantName = this.tenants[0].name || 'Cliente';
+                    const firstTenantPhone = this.onlyDigits(this.tenants[0].phone);
+                    
+                    // Identifica se a origem é o cliente e injeta a inteligência de número no parâmetro
+                    let finalAttendantParam = this.attendantName;
+                    if (this.userType === 'Cliente' && firstTenantPhone.length >= 10) {
+                        // Formato internacional brasileiro 55 + DDD + Número
+                        const prefix = firstTenantPhone.startsWith('55') ? '' : '55';
+                        finalAttendantParam = `CLIENTE_${prefix}${firstTenantPhone}`;
+                    }
+
                     const baseUrl = window.location.href.split('?')[0];
-                    const returnLink = `${baseUrl}?retorno=1&atendente=${encodeURIComponent(this.attendantName)}&cliente=${encodeURIComponent(firstTenant)}`;
+                    const returnLink = `${baseUrl}?retorno=1&atendente=${encodeURIComponent(finalAttendantParam)}&cliente=${encodeURIComponent(firstTenantName)}`;
                     
                     let tTxt = '';
                     this.tenants.forEach((t, i) => { if(t.cpf) tTxt += `👤 *LOC ${i+1}:* ${t.name.toUpperCase()}\nCPF: ${t.cpf}\nWhats: ${t.phone}\nE-mail: ${t.email.toLowerCase()}\n\n`; });
@@ -296,7 +306,7 @@
                     }
 
                     const chargesTxt = `${this.values.iptu ? `IPTU: ${this.values.iptu}\n` : ''}${this.values.condo ? `Condomínio: ${this.values.condo}\n` : ''}`;
-                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
+                    const msg = `*NOVA ANÁLISE: RIBERA*\n\nORIGEM: ${this.userType}\nATENDENTE: ${this.userType === 'Cliente' ? 'Preenchido pelo Cliente' : this.attendantName}\n\n${tTxt}${comTxt}🏠 *IMÓVEL:* ${this.property.type}\nCEP: ${this.property.cep}\nNº: ${this.property.number || '-'}\n💰 *ALUGUEL:* ${this.values.rent}\n${chargesTxt}\n✅ *RETORNO:* ${returnLink}`;
                     
                     window.open(`https://api.whatsapp.com/send?phone=5515996367478&text=${encodeURIComponent(msg)}`, '_blank');
                 },
@@ -308,21 +318,35 @@
                         }
                     }
 
-                    if (!confirm(`Confirma o envio do retorno para o atendente: ${this.attendantName}?`)) {
+                    // Trata a exibição do nome do confirm amigavelmente caso seja o celular do cliente
+                    const displayTarget = this.attendantName.startsWith('CLIENTE_') ? 'Direto ao Cliente (Locatário 1)' : this.attendantName;
+
+                    if (!confirm(`Confirma o envio do retorno para: ${displayTarget}?`)) {
                         return;
                     }
 
                     let msg = status === 'aprovado'
-                        ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Solicitar a biometria facial para continuidade do processo.`
+                        ? `*📢 RETORNO RIBERA (APROVADO)*\n\nOlá,\nA sua ficha de fiança locatícia foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n⚠️ *PRÓXIMO PASSO:* Realizar a biometria facial para emissão do contrato.`
                         : status === 'biometria'
-                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá *${this.attendantName}*,\nA biometria do cliente *${this.clientName}* foi aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *LIBERADO PARA EMISSÃO DE CONTRATO.*`
-                        : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá *${this.attendantName}*,\nA ficha do cliente *${this.clientName}* não foi aprovada.\n\n⚠️ *AÇÃO:* Fale com o Marcelo para detalhes.`;
+                        ? `*📢 RETORNO RIBERA (BIOMETRIA)*\n\nOlá,\nA sua biometria facial foi validada e aprovada.\n\n🏦 *SEGURADORA:* ${this.returnForm.insurer}\n💳 *VALOR MENSAL:* ${this.returnForm.monthlyValue}\n\n✅ *PROCESSO LIBERADO PARA EMISSÃO DE CONTRATO DE LOCAÇÃO.*`
+                        : `*📢 RETORNO RIBERA (STATUS)*\n\nOlá,\nIdentificamos uma inconsistência na análise da sua ficha e ela não pôde ser aprovada neste momento.\n\n⚠️ *DÚVIDAS:* Por favor, entre em contato direto conosco para entender os detalhes.`;
 
-                    const targetDestination = this.contacts[this.attendantName];
+                    let targetDestination = '';
+
+                    // Inteligência Híbrida de Roteamento de Retorno
+                    if (this.attendantName.startsWith('CLIENTE_')) {
+                        // Extrai o WhatsApp limpo do locatário que foi guardado no parâmetro
+                        targetDestination = this.attendantName.replace('CLIENTE_', '');
+                    } else {
+                        // Busca da lista de colaboradores internos da corretora
+                        targetDestination = this.contacts[this.attendantName];
+                    }
 
                     if (targetDestination && targetDestination.trim().length > 0) {
+                        // Abre direto na conversa privada do WhatsApp Business (seja colaborador ou cliente)
                         window.open(`https://api.whatsapp.com/send?phone=${targetDestination}&text=${encodeURIComponent(msg)}`, '_blank');
                     } else {
+                        // Abre a lista em branco do WhatsApp Web/App para o operador escolher livremente
                         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
                     }
                 }
